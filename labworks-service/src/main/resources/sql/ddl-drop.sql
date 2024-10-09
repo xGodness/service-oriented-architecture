@@ -1,0 +1,11 @@
+DROP TRIGGER IF EXISTS set_date_on_labwork_trigger ON labwork CASCADE;
+
+DROP FUNCTION IF EXISTS set_date_on_labwork CASCADE;
+
+DROP TABLE IF EXISTS labwork CASCADE;
+
+DROP TABLE IF EXISTS discipline CASCADE;
+
+DROP TABLE IF EXISTS faculty CASCADE;
+
+DROP TYPE IF EXISTS difficulty_t CASCADE;
