@@ -1,6 +1,6 @@
 package exception;
 
-import model.dto.ErrorMessagesDTO;
+import exception.model.dto.ErrorMessagesDTO;
 
 import java.util.List;
 

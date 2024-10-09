@@ -4,7 +4,7 @@ import jakarta.json.bind.serializer.DeserializationContext;
 import jakarta.json.bind.serializer.JsonbDeserializer;
 import jakarta.json.stream.JsonParser;
 import jakarta.ws.rs.ext.Provider;
-import model.dto.DifficultyDTO;
+import endpoint.labworks.model.dto.DifficultyDTO;
 
 import java.lang.reflect.Type;
 

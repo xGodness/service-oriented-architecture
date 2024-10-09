@@ -1,7 +1,7 @@
 package model.dto.util;
 
-import model.dto.CoordinatesDTO;
-import model.dto.LabworkDTO;
+import endpoint.labworks.model.dto.CoordinatesDTO;
+import endpoint.labworks.model.dto.LabworkDTO;
 
 import java.util.ArrayList;
 import java.util.List;

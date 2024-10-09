@@ -5,7 +5,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.extern.java.Log;
-import model.dto.ErrorMessagesDTO;
+import exception.model.dto.ErrorMessagesDTO;
 
 import java.util.logging.Level;
 

@@ -1,7 +1,7 @@
 package exception;
 
 import lombok.Getter;
-import model.dto.ErrorMessagesDTO;
+import exception.model.dto.ErrorMessagesDTO;
 
 import java.util.List;
 
