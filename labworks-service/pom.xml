@@ -10,9 +10,6 @@
     <artifactId>labworks-service</artifactId>
     <packaging>war</packaging>
     <name>labworks-service</name>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -79,6 +76,11 @@
                     <source>19</source>
                     <target>19</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
             </plugin>
         </plugins>
     </build>
