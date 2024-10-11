@@ -48,4 +48,14 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 HttpStatus.SERVICE_UNAVAILABLE,
                 webRequest);
     }
+
+    @ExceptionHandler(value = {RuntimeException.class})
+    protected ResponseEntity<Object> handle(RuntimeException ex, WebRequest webRequest) {
+        log.info("Caught UNHANDLED RuntimeException: " + ex.getMessage());
+        return super.handleExceptionInternal(ex,
+                new ErrorMessages("Something went wrong"),
+                new HttpHeaders(),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                webRequest);
+    }
 }
