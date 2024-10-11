@@ -1,8 +1,8 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
-import exception.UnexpectedInputFormatException;
 import lombok.Getter;
 import org.jooq.SortField;
+import ru.xgodness.exception.UnexpectedInputFormatException;
 
 @Getter
 public class SortingQueryToken extends QueryToken {

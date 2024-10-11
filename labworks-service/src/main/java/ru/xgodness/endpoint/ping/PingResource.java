@@ -1,4 +1,4 @@
-package endpoint.ping;
+package ru.xgodness.endpoint.ping;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

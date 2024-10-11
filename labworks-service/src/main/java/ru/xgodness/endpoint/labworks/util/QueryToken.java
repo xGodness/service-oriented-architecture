@@ -1,7 +1,7 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
-import exception.UnexpectedInputFormatException;
 import lombok.Getter;
+import ru.xgodness.exception.UnexpectedInputFormatException;
 
 import java.util.Arrays;
 

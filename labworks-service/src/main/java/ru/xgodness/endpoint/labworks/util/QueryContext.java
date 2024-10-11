@@ -1,10 +1,10 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
-import exception.ApplicationException;
-import exception.UnexpectedInputFormatException;
 import jakarta.ws.rs.core.MultivaluedMap;
 import lombok.Getter;
 import org.jooq.Condition;
+import ru.xgodness.exception.ApplicationException;
+import ru.xgodness.exception.UnexpectedInputFormatException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class QueryContext {
     }
 
     private List<FilteringQueryToken> parseFilteringTokens(MultivaluedMap<String, String> queryParamsMap, List<String> errorMessages) {
-        List<String> filteringParams = queryParamsMap.get("filter");
+        List<String> filteringParams = queryParamsMap.get("ru/xgodness/filter");
         if (filteringParams == null) return List.of();
         return IntStream.range(0, filteringParams.size())
                 .mapToObj(i -> {
@@ -40,7 +40,7 @@ public class QueryContext {
                         return new FilteringQueryToken(param);
                     } catch (ApplicationException ex) {
                         errorMessages.addAll(
-                                ex.getErrorMessagesDTO().getMessages().stream()
+                                ex.getErrorMessages().getMessages().stream()
                                         .map(msg -> "Error in filter parameter #%d: ".formatted(i + 1) + msg).toList()
                         );
                         return null;
@@ -70,7 +70,7 @@ public class QueryContext {
             } catch (ApplicationException ex) {
                 int finalI = i;
                 errorMessages.addAll(
-                        ex.getErrorMessagesDTO().getMessages().stream()
+                        ex.getErrorMessages().getMessages().stream()
                                 .map(msg -> "Error in sort parameter #%d: ".formatted(finalI + 1) + msg).toList()
                 );
             }

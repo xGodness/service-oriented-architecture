@@ -1,23 +1,24 @@
-package exception.handling;
+package ru.xgodness.exception.handling;
 
-import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.extern.java.Log;
-import exception.model.dto.ErrorMessagesDTO;
+import ru.xgodness.exception.dto.ErrorMessages;
 
-import java.util.logging.Level;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Log
 @Provider
-public class DefaultExceptionHandler implements ExceptionMapper<WebApplicationException> {
+public class DefaultExceptionHandler implements ExceptionMapper<RuntimeException> {
     @Override
-    public Response toResponse(WebApplicationException ex) {
-        log.log(Level.WARNING, "Caught UNHANDLED WebApplicationException: " + ex.getMessage());
+    public Response toResponse(RuntimeException ex) {
+        log.warning("Caught UNHANDLED WebApplicationException: " + ex.getMessage());
+        log.warning(Arrays.stream(ex.getStackTrace()).map(Object::toString).collect(Collectors.joining("\n")));
         return Response
                 .status(500)
-                .entity(new ErrorMessagesDTO("Something went wrong"))
+                .entity(new ErrorMessages("Something went wrong"))
                 .build();
     }
 }

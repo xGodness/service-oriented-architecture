@@ -1,17 +1,18 @@
-package endpoint.faculties;
+package ru.xgodness.endpoint.faculties;
 
-import exception.AlreadyExistsException;
-import exception.NotFoundException;
-import exception.ValidationException;
-import endpoint.faculties.model.dto.DisciplineDTO;
-import model.dto.FacultyDTO;
-import model.generated.tables.Discipline;
-import model.generated.tables.Faculty;
-import model.generated.tables.Labwork;
-import model.generated.tables.records.DisciplineRecord;
-import model.generated.tables.records.FacultyRecord;
 import org.jooq.DSLContext;
-import orm.DSLContextProvider;
+import ru.xgodness.endpoint.faculties.dto.Discipline;
+import ru.xgodness.endpoint.faculties.dto.Faculty;
+import ru.xgodness.exception.AlreadyExistsException;
+import ru.xgodness.exception.NotFoundException;
+import ru.xgodness.exception.ValidationException;
+import ru.xgodness.model.generated.tables.Labwork;
+import ru.xgodness.model.generated.tables.records.DisciplineRecord;
+import ru.xgodness.model.generated.tables.records.FacultyRecord;
+import ru.xgodness.orm.DSLContextProvider;
+
+import static ru.xgodness.model.generated.tables.Discipline.DISCIPLINE;
+import static ru.xgodness.model.generated.tables.Faculty.FACULTY;
 
 public class FacultyService {
     private static final DSLContext context = DSLContextProvider.getContext();
@@ -25,18 +26,18 @@ public class FacultyService {
                 .execute();
     }
 
-    public static FacultyDTO storeFaculty(FacultyDTO dto) {
+    public static Faculty storeFaculty(Faculty dto) {
         String faculty = dto.getName();
         if (facultyExists(faculty))
             throw new AlreadyExistsException("Faculty %s already exists".formatted(faculty));
 
-        FacultyRecord record = context.newRecord(Faculty.FACULTY);
+        FacultyRecord record = context.newRecord(FACULTY);
         record.setName(faculty);
         record.store();
-        return new FacultyDTO(record.getName());
+        return new Faculty(record.getName());
     }
 
-    public static DisciplineDTO storeDiscipline(DisciplineDTO dto) {
+    public static Discipline storeDiscipline(Discipline dto) {
         String faculty = dto.getFaculty();
         String disciplineName = dto.getName();
         int selfStudyHours = dto.getSelfStudyHours();
@@ -47,13 +48,13 @@ public class FacultyService {
         if (selfStudyHours <= 0)
             throw new ValidationException("Self study hours must be positive");
 
-        DisciplineRecord record = context.newRecord(Discipline.DISCIPLINE);
+        DisciplineRecord record = context.newRecord(DISCIPLINE);
         record.setFaculty(faculty);
         record.setName(disciplineName);
         record.setSelfStudyHours(selfStudyHours);
         record.store();
 
-        return DisciplineDTO.builder()
+        return Discipline.builder()
                 .faculty(record.getFaculty())
                 .name(record.getName())
                 .selfStudyHours(record.getSelfStudyHours())
@@ -61,18 +62,18 @@ public class FacultyService {
     }
 
     public static boolean facultyExists(String faculty) {
-        return context.fetchExists(Faculty.FACULTY, Faculty.FACULTY.NAME.eq(faculty));
+        return context.fetchExists(FACULTY, FACULTY.NAME.eq(faculty));
     }
 
     public static boolean disciplineExists(String faculty, String disciplineName) {
         return context.fetchOptional(
-                Discipline.DISCIPLINE,
-                Discipline.DISCIPLINE.NAME.eq(disciplineName),
-                Discipline.DISCIPLINE.FACULTY.eq(faculty)).isPresent();
+                DISCIPLINE,
+                DISCIPLINE.NAME.eq(disciplineName),
+                DISCIPLINE.FACULTY.eq(faculty)).isPresent();
     }
 
-    public static int getSelfStudyHours(String disciplineName) {
-        var recordOpt = context.fetchOptional(Discipline.DISCIPLINE, Discipline.DISCIPLINE.NAME.eq(disciplineName));
+    public static int getSelfStudyHours(String faculty, String disciplineName) {
+        var recordOpt = context.fetchOptional(DISCIPLINE, DISCIPLINE.FACULTY.eq(faculty), DISCIPLINE.NAME.eq(disciplineName));
         recordOpt.orElseThrow(() -> new NotFoundException("Discipline with name %s does not exist".formatted(disciplineName)));
         return recordOpt.get().getSelfStudyHours();
     }

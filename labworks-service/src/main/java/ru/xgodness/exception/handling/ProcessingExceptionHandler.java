@@ -1,23 +1,21 @@
-package exception.handling;
+package ru.xgodness.exception.handling;
 
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.extern.java.Log;
-import exception.model.dto.ErrorMessagesDTO;
-
-import java.util.logging.Level;
+import ru.xgodness.exception.dto.ErrorMessages;
 
 @Log
 @Provider
 public class ProcessingExceptionHandler implements ExceptionMapper<ProcessingException> {
     @Override
     public Response toResponse(ProcessingException ex) {
-        log.log(Level.INFO, "Caught ProcessingException: " + ex.getCause());
+        log.info("Caught ProcessingException: " + ex.getCause());
         return Response
                 .status(400)
-                .entity(new ErrorMessagesDTO("Cannot process request body: invalid JSON format or enum value provided"))
+                .entity(new ErrorMessages("Cannot process request body: invalid JSON format or enum value provided"))
                 .build();
     }
 }

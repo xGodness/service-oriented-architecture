@@ -1,4 +1,4 @@
-package orm;
+package ru.xgodness.orm;
 
 import lombok.Getter;
 

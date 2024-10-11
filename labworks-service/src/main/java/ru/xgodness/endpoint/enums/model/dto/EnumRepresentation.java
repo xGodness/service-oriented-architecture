@@ -1,4 +1,4 @@
-package endpoint.enums.model.dto;
+package ru.xgodness.endpoint.enums.model.dto;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
 import lombok.Getter;
 

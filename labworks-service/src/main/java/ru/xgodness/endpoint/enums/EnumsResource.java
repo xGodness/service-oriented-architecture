@@ -1,4 +1,4 @@
-package endpoint.enums;
+package ru.xgodness.endpoint.enums;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

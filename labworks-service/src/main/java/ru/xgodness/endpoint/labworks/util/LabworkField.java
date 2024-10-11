@@ -1,10 +1,10 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
 import lombok.Getter;
-import model.generated.enums.DifficultyT;
-import model.generated.tables.Labwork;
-import model.generated.tables.records.LabworkRecord;
 import org.jooq.TableField;
+import ru.xgodness.model.generated.enums.DifficultyT;
+import ru.xgodness.model.generated.tables.Labwork;
+import ru.xgodness.model.generated.tables.records.LabworkRecord;
 
 import java.time.LocalDate;
 

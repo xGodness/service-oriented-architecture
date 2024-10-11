@@ -1,11 +1,11 @@
-package endpoint.labworks.util;
+package ru.xgodness.endpoint.labworks.util;
 
-import exception.UnexpectedInputFormatException;
-import exception.ValidationException;
 import lombok.Getter;
-import model.generated.enums.DifficultyT;
-import model.generated.tables.Labwork;
 import org.jooq.Condition;
+import ru.xgodness.exception.UnexpectedInputFormatException;
+import ru.xgodness.exception.ValidationException;
+import ru.xgodness.model.generated.enums.DifficultyT;
+import ru.xgodness.model.generated.tables.Labwork;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

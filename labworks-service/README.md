@@ -1,4 +1,5 @@
 # How to deploy on Payara Micro 6
+
 * Initialise Postgres database
 
 
