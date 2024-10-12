@@ -18,20 +18,20 @@ public class QueryContext {
     private final List<SortingQueryToken> sortingTokens;
     private final Long limit;
     private final Long offset;
+    private final List<String> errorMessages = new ArrayList<>();
 
     public QueryContext(MultivaluedMap<String, String> queryParamsMap) {
-        List<String> errorMessages = new ArrayList<>();
 
-        this.filteringTokens = parseFilteringTokens(queryParamsMap, errorMessages);
-        this.sortingTokens = parseSortingTokens(queryParamsMap, errorMessages);
-        this.limit = parseLimit(queryParamsMap, errorMessages);
-        this.offset = parseOffset(queryParamsMap, errorMessages);
+        this.filteringTokens = parseFilteringTokens(queryParamsMap);
+        this.sortingTokens = parseSortingTokens(queryParamsMap);
+        this.limit = parseLimit(queryParamsMap);
+        this.offset = parseOffset(queryParamsMap);
 
         if (!errorMessages.isEmpty()) throw new UnexpectedInputFormatException(errorMessages);
     }
 
-    private List<FilteringQueryToken> parseFilteringTokens(MultivaluedMap<String, String> queryParamsMap, List<String> errorMessages) {
-        List<String> filteringParams = queryParamsMap.get("ru/xgodness/filter");
+    private List<FilteringQueryToken> parseFilteringTokens(MultivaluedMap<String, String> queryParamsMap) {
+        List<String> filteringParams = queryParamsMap.get("filter");
         if (filteringParams == null) return List.of();
         return IntStream.range(0, filteringParams.size())
                 .mapToObj(i -> {
@@ -48,7 +48,7 @@ public class QueryContext {
                 }).toList();
     }
 
-    private List<SortingQueryToken> parseSortingTokens(MultivaluedMap<String, String> queryParamsMap, List<String> errorMessages) {
+    private List<SortingQueryToken> parseSortingTokens(MultivaluedMap<String, String> queryParamsMap) {
         List<String> sortingParams = queryParamsMap.get("sort");
         if (sortingParams == null) return List.of();
 
@@ -79,7 +79,7 @@ public class QueryContext {
         return parsedTokenList;
     }
 
-    private Long parseLimit(MultivaluedMap<String, String> queryParamsMap, List<String> errorMessages) {
+    private Long parseLimit(MultivaluedMap<String, String> queryParamsMap) {
         List<String> limitList = queryParamsMap.get("limit");
         if (limitList == null) return null;
         try {
@@ -97,7 +97,7 @@ public class QueryContext {
         return null;
     }
 
-    private Long parseOffset(MultivaluedMap<String, String> queryParamsMap, List<String> errorMessages) {
+    private Long parseOffset(MultivaluedMap<String, String> queryParamsMap) {
         List<String> offsetList = queryParamsMap.get("offset");
         if (offsetList == null) return null;
         try {
