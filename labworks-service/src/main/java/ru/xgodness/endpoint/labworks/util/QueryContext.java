@@ -102,8 +102,8 @@ public class QueryContext {
         if (offsetList == null) return null;
         try {
             long value = Long.parseLong(offsetList.get(0));
-            if (value <= 0) {
-                errorMessages.add("Offset must be positive");
+            if (value < 0) {
+                errorMessages.add("Offset must be positive or 0");
                 return null;
             }
             return value;
