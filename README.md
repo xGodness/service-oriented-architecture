@@ -1,6 +1,6 @@
 # How to make it work
 
-## [Deploying `labworks-service` on Payara Micro](bars-service/README.md)
+## [Deploying `labworks-service` on Payara Micro](labworks-service/README.md)
 
 ## [Deploying `bars-service` on WildFly (standalone mode)](bars-service/README.md)
 
