@@ -14,7 +14,8 @@ public class FacultiesResource {
 
     @DELETE
     @Path("{faculty}/{discipline-name}/labworks")
-    public Response deleteLabworksByFacultyAndDiscipline(@PathParam("faculty") String faculty, @PathParam("discipline-name") String dicsiplineName) {
+    public Response deleteLabworksByFacultyAndDiscipline(@PathParam("faculty") String faculty,
+                                                         @PathParam("discipline-name") String dicsiplineName) {
         FacultyService.deleteLabworksByFacultyAndDiscipline(faculty, dicsiplineName);
         return Response.status(204).build();
     }
@@ -23,22 +24,38 @@ public class FacultiesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postFaculty(Faculty faculty) {
-        var facultyDTO = FacultyService.storeFaculty(faculty);
-        return Response.ok().entity(facultyDTO).build();
+        var result = FacultyService.storeFaculty(faculty);
+        return Response.ok().entity(result).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFaculties() {
+        var facultiesList = FacultyService.getAllFaculties();
+        return Response.ok().entity(facultiesList).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/disciplines")
+    public Response getDisciplines() {
+        var disciplineList = FacultyService.getAllDisciplines();
+        return Response.ok().entity(disciplineList).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("disciplines")
+    @Path("faculties")
     public Response postDiscipline(Discipline discipline) {
-        var resultDTO = FacultyService.storeDiscipline(discipline);
-        return Response.ok().entity(resultDTO).build();
+        var result = FacultyService.storeDiscipline(discipline);
+        return Response.ok().entity(result).build();
     }
 
     @GET
     @Path("/check/{faculty}/{discipline-name}")
-    public Response checkFacultyAndDiscipline(@PathParam("faculty") String faculty, @PathParam("discipline-name") String disciplineName) {
+    public Response checkFacultyAndDiscipline(@PathParam("faculty") String faculty,
+                                              @PathParam("discipline-name") String disciplineName) {
         if (FacultyService.disciplineExists(faculty, disciplineName))
             return Response.status(204).build();
         throw new NotFoundException("Discipline %s on faculty %s was not found".formatted(faculty, disciplineName));

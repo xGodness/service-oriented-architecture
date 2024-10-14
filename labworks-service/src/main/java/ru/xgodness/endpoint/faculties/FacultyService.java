@@ -3,6 +3,8 @@ package ru.xgodness.endpoint.faculties;
 import org.jooq.DSLContext;
 import ru.xgodness.endpoint.faculties.dto.Discipline;
 import ru.xgodness.endpoint.faculties.dto.Faculty;
+import ru.xgodness.endpoint.faculties.model.dto.DisciplinesList;
+import ru.xgodness.endpoint.faculties.model.dto.FacultiesList;
 import ru.xgodness.exception.AlreadyExistsException;
 import ru.xgodness.exception.NotFoundException;
 import ru.xgodness.exception.ValidationException;
@@ -24,6 +26,37 @@ public class FacultyService {
         context.deleteFrom(Labwork.LABWORK)
                 .where(Labwork.LABWORK.FACULTY.eq(faculty), Labwork.LABWORK.DISCIPLINE.eq(disciplineName))
                 .execute();
+    }
+
+    public static DisciplinesList getAllDisciplines() {
+        return new DisciplinesList(
+                context.select(
+                                DISCIPLINE.FACULTY,
+                                DISCIPLINE.NAME,
+                                DISCIPLINE.SELF_STUDY_HOURS)
+                        .from(DISCIPLINE)
+                        .orderBy(DISCIPLINE.FACULTY, DISCIPLINE.NAME)
+                        .fetch()
+                        .stream()
+                        .map(record -> Discipline.builder()
+                                .faculty(record.getValue(DISCIPLINE.FACULTY))
+                                .name(record.getValue(DISCIPLINE.NAME))
+                                .selfStudyHours(record.getValue(DISCIPLINE.SELF_STUDY_HOURS))
+                                .build())
+                        .toList()
+        );
+    }
+
+    public static FacultiesList getAllFaculties() {
+        return new FacultiesList(
+                context.select(FACULTY.NAME)
+                        .from(FACULTY)
+                        .orderBy(FACULTY.NAME)
+                        .fetch()
+                        .stream()
+                        .map(record -> new Faculty(record.getValue(DISCIPLINE.NAME)))
+                        .toList()
+        );
     }
 
     public static Faculty storeFaculty(Faculty dto) {

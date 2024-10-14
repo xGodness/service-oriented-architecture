@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.extern.java.Log;
+import ru.xgodness.exception.dto.ErrorMessages;
 
 @Log
 @Provider
@@ -14,7 +15,8 @@ public class JakartaNotFoundExceptionHandler implements ExceptionMapper<NotFound
         log.info("Caught Jakarta NotFoundException: " + ex.getMessage());
         return Response
                 .status(404)
-                .entity("Resource was not found")
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .entity(new ErrorMessages("Resource was not found"))
                 .build();
     }
 }

@@ -14,9 +14,10 @@ import ru.xgodness.endpoint.labworks.dto.Labwork;
 public class LabworkController {
 
     @PatchMapping("/{labwork-id}/difficulty/increase/{steps-count}")
-    public ResponseEntity<Labwork> increaseDifficulty(@PathVariable("labwork-id") long id, @PathVariable("steps-count") int stepsCount) {
+    public ResponseEntity<Labwork> increaseDifficulty(@PathVariable("labwork-id") long id,
+                                                      @PathVariable("steps-count") int stepsCount) {
         log.info("increaseDifficulty request with id = %d, stepsCount = %d".formatted(id, stepsCount));
-        var dto = LabworkService.increaseDifficultyByStepCount(id, stepsCount);
-        return ResponseEntity.ok().body(dto);
+        var result = LabworkService.increaseDifficultyByStepCount(id, stepsCount);
+        return ResponseEntity.ok().body(result);
     }
 }

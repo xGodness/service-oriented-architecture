@@ -13,5 +13,4 @@ public class PingResource {
     public String ping() {
         return "pong";
     }
-
 }

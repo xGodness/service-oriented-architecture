@@ -17,7 +17,7 @@ psql -U ${POSTGRES_USER} -d ${POSTGRES_DATABASE} -f ddl-init.sql
 * Change Postgres credentials and JDBC url in `resources/jdbc.properties`
 
 
-* If for some reason you need to regenerate JOOQ models, run `src/main/java/codegen/JooqGenerator.java#main()`
+* If for some reason you need to regenerate JOOQ models, run `src/main/java/codegen/ru.xgodness.JooqGenerator.java#main()`
 
 
 * Build `war` with Maven:

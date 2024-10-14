@@ -40,7 +40,7 @@ public class LabworkService {
         record.setCoordinateX(dto.getCoordinates().getX());
         record.setCoordinateY(dto.getCoordinates().getY());
         record.setMinimalPoint(dto.getMinimalPoint());
-        record.setDifficulty(mapDTOToDifficulty(dto.getDifficulty()));
+        record.setDifficulty(mapDTOToDifficultyT(dto.getDifficulty()));
         record.setDiscipline(disciplineName);
         record.setFaculty(faculty);
         record.store();
@@ -93,7 +93,7 @@ public class LabworkService {
                                 record.getValue(LABWORK.COORDINATE_Y)))
                         .creationDate(record.getValue(LABWORK.CREATION_DATE))
                         .minimalPoint(record.getValue(LABWORK.MINIMAL_POINT))
-                        .difficulty(mapDifficultyToDTO(record.getValue(LABWORK.DIFFICULTY)))
+                        .difficulty(mapDifficultyTToDTO(record.getValue(LABWORK.DIFFICULTY)))
                         .discipline(Discipline.builder()
                                 .name(record.getValue(LABWORK.DISCIPLINE))
                                 .faculty(record.getValue(LABWORK.FACULTY))
@@ -125,7 +125,7 @@ public class LabworkService {
                 .set(LABWORK.COORDINATE_X, dto.getCoordinates().getX())
                 .set(LABWORK.COORDINATE_Y, dto.getCoordinates().getY())
                 .set(LABWORK.MINIMAL_POINT, dto.getMinimalPoint())
-                .set(LABWORK.DIFFICULTY, mapDTOToDifficulty(dto.getDifficulty()))
+                .set(LABWORK.DIFFICULTY, mapDTOToDifficultyT(dto.getDifficulty()))
                 .set(LABWORK.FACULTY, faculty)
                 .set(LABWORK.DISCIPLINE, disciplineName)
                 .where(LABWORK.ID.eq(id))
@@ -174,11 +174,11 @@ public class LabworkService {
             throw new NotFoundException("Discipline with name %s and faculty %s does not exist".formatted(disciplineName, faculty));
     }
 
-    private static DifficultyT mapDTOToDifficulty(Difficulty dto) {
+    private static DifficultyT mapDTOToDifficultyT(Difficulty dto) {
         return DifficultyT.lookupLiteral(dto.getLiteral());
     }
 
-    private static Difficulty mapDifficultyToDTO(DifficultyT difficultyT) {
+    private static Difficulty mapDifficultyTToDTO(DifficultyT difficultyT) {
         return Difficulty.fromString(difficultyT.getLiteral());
     }
 
@@ -189,7 +189,7 @@ public class LabworkService {
                 .coordinates(new Coordinates(record.getCoordinateX(), record.getCoordinateY()))
                 .creationDate(record.getCreationDate())
                 .minimalPoint(record.getMinimalPoint())
-                .difficulty(mapDifficultyToDTO(record.getDifficulty()))
+                .difficulty(mapDifficultyTToDTO(record.getDifficulty()))
                 .discipline(Discipline.builder()
                         .name(record.getDiscipline())
                         .faculty(record.getFaculty())

@@ -3,9 +3,9 @@
 
     <jdbc>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://localhost:5432/soa</url>
-        <user>postgres</user>
-        <password>postgres</password>
+        <url>jdbc:postgresql://localhost:5433/studs</url>
+        <user>s335151</user>
+        <password></password>
     </jdbc>
 
     <generator>
@@ -20,14 +20,14 @@
 
         <database>
             <name>org.jooq.meta.postgres.PostgresDatabase</name>
-            <inputSchema>public</inputSchema>
+            <inputSchema>s335151</inputSchema>
             <includes>.*</includes>
             <excludes></excludes>
         </database>
 
         <target>
-            <packageName>model.generated</packageName>
-            <directory>/home/xgodness/service-oriented-architecture/2-lab/labworks-service/src/main/java/</directory>
+            <packageName>ru.xgodness.model.generated</packageName>
+            <directory>/home/xgodness/service-oriented-architecture/2-lab/codegen/src/main/java</directory>
         </target>
     </generator>
 </configuration>

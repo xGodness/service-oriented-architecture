@@ -3,6 +3,7 @@ package ru.xgodness.exception.handling;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.xgodness.exception.dto.ErrorMessages;
 
@@ -46,6 +48,16 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 new ErrorMessages("External service is not available"),
                 new HttpHeaders(),
                 HttpStatus.SERVICE_UNAVAILABLE,
+                webRequest);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest webRequest) {
+        log.info("Caught NoHandlerFoundException: " + ex.getMessage());
+        return super.handleExceptionInternal(ex,
+                new ErrorMessages("Not found"),
+                new HttpHeaders(),
+                HttpStatus.NOT_FOUND,
                 webRequest);
     }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.19.8.xsd">
+
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://localhost:5432/soa</url>
+        <user>postgres</user>
+        <password>postgres</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.codegen.JavaGenerator</name>
+
+        <generate>
+            <generatedAnnotation>true</generatedAnnotation>
+            <generatedAnnotationType>DETECT_FROM_JDK</generatedAnnotationType>
+            <generatedAnnotationDate>true</generatedAnnotationDate>
+            <generatedAnnotationJooqVersion>true</generatedAnnotationJooqVersion>
+        </generate>
+
+        <database>
+            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            <inputSchema>public</inputSchema>
+            <includes>.*</includes>
+            <excludes></excludes>
+        </database>
+
+        <target>
+            <packageName>ru.xgodness.model.generated</packageName>
+            <directory>/home/xgodness/service-oriented-architecture/2-lab/codegen/src/main/java</directory>
+        </target>
+    </generator>
+</configuration>

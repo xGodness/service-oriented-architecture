@@ -9,7 +9,9 @@ import java.util.Objects;
 import java.util.Properties;
 
 public class JDBCProperties {
-    private static final String PROPERTIES_RELATIVE_PATH = "../applications/labworks-service/WEB-INF/classes/jdbc.properties";
+    private static final boolean CONNECT_TO_HELIOS = false;
+    private static final String PROPERTIES_FILENAME = CONNECT_TO_HELIOS ? "jdbc-helios.properties" : "jdbc-local.properties";
+    private static final String PROPERTIES_RELATIVE_PATH = "../applications/labworks-service/WEB-INF/classes/" + PROPERTIES_FILENAME;
 
     @Getter
     private static final String username;

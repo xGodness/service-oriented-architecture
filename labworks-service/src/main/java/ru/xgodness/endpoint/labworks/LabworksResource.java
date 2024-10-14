@@ -16,16 +16,16 @@ public class LabworksResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postLabwork(Labwork labwork) {
-        var resultDTO = LabworkService.storeLabwork(labwork);
-        return Response.ok().entity(resultDTO).build();
+        var result = LabworkService.storeLabwork(labwork);
+        return Response.ok().entity(result).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response getLabwork(@PathParam("id") long id) {
-        var resultDTO = LabworkService.getLabworkById(id);
-        return Response.ok().entity(resultDTO).build();
+        var result = LabworkService.getLabworkById(id);
+        return Response.ok().entity(result).build();
     }
 
     @GET
@@ -33,8 +33,8 @@ public class LabworksResource {
     public Response getAllLabworks(@Context UriInfo uriInfo) {
         var queryParameters = uriInfo.getQueryParameters();
         log.info(queryParameters.toString());
-        var pageDTO = LabworkService.getAllLabworks(queryParameters);
-        return Response.ok().entity(pageDTO).build();
+        var page = LabworkService.getAllLabworks(queryParameters);
+        return Response.ok().entity(page).build();
     }
 
     @PUT
@@ -42,8 +42,8 @@ public class LabworksResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response updateLabwork(@PathParam("id") long id, Labwork labwork) {
-        var resultDTO = LabworkService.updateLabworkById(id, labwork);
-        return Response.ok().entity(resultDTO).build();
+        var result = LabworkService.updateLabworkById(id, labwork);
+        return Response.ok().entity(result).build();
     }
 
     @DELETE

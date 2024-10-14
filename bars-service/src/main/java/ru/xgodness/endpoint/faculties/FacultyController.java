@@ -16,7 +16,6 @@ public class FacultyController {
     public ResponseEntity<?> makeHardcore(@PathVariable("faculty") String faculty, @PathVariable("discipline-name") String disciplineName) {
         log.info("makeHardcore request with faculy = %s, disciplineName = %s".formatted(faculty, disciplineName));
         FacultyService.checkFacultyAndDisciplineExistence(faculty, disciplineName);
-        log.info("Checked existence; faculty and discipline do exist");
         FacultyService.makeHardcore(faculty, disciplineName);
         return ResponseEntity.status(204).build();
     }

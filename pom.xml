@@ -15,7 +15,7 @@
         <module>labworks-service</module>
         <module>bars-service</module>
         <module>common</module>
-        <module>soa-codegen</module>
+        <module>codegen</module>
     </modules>
 
     <version>1.0</version>
