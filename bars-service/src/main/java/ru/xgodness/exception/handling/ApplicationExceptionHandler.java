@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.xgodness.exception.ValidationException;
 import ru.xgodness.exception.dto.ErrorMessages;
 
 @Log
@@ -48,6 +49,16 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 new ErrorMessages("External service is not available"),
                 new HttpHeaders(),
                 HttpStatus.SERVICE_UNAVAILABLE,
+                webRequest);
+    }
+
+    @ExceptionHandler(value = {ValidationException.class})
+    protected ResponseEntity<Object> handle(ValidationException ex, WebRequest webRequest) {
+        log.info("Caught ValidationException: " + ex.getMessage());
+        return super.handleExceptionInternal(ex,
+                ex.getErrorMessages(),
+                new HttpHeaders(),
+                HttpStatus.UNPROCESSABLE_ENTITY,
                 webRequest);
     }
 

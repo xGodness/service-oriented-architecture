@@ -1,11 +1,13 @@
 package ru.xgodness.http;
 
+import lombok.extern.java.Log;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import ru.xgodness.endpoint.labworks.dto.Labwork;
 import ru.xgodness.endpoint.labworks.dto.LabworkPage;
 
+@Log
 public class ExternalApiCaller {
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final String labworksServiceUrl = "https://localhost:9172/labworks-service/api/v1";
@@ -34,7 +36,8 @@ public class ExternalApiCaller {
     }
 
     public static LabworkPage getTenMostDifficultLabworks(String excludeFaculty, String excludeDiscipline) {
-        String url = labworksServiceUrl + "/labworks?filter=faculty[neq]=%s&filter=discipline[neq]=%s&limit=10".formatted(excludeFaculty, excludeDiscipline);
+        String url = labworksServiceUrl + "/labworks?filter=faculty[neq]=%s&filter=discipline_name[neq]=%s&limit=10".formatted(excludeFaculty, excludeDiscipline);
+        log.info("[getTenMostDifficultLabworks] Sending request: " + url);
         return restTemplate.getForEntity(url, LabworkPage.class).getBody();
     }
 }

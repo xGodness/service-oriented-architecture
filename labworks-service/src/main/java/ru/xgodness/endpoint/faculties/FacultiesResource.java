@@ -46,7 +46,7 @@ public class FacultiesResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("faculties")
+    @Path("/disciplines")
     public Response postDiscipline(Discipline discipline) {
         var result = FacultyService.storeDiscipline(discipline);
         return Response.ok().entity(result).build();

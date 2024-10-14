@@ -1,6 +1,7 @@
 package ru.xgodness.endpoint.labworks.dto;
 
 import lombok.Getter;
+import ru.xgodness.exception.ValidationException;
 
 @Getter
 public enum Difficulty {
@@ -21,7 +22,7 @@ public enum Difficulty {
     }
 
     public static Difficulty increase(Difficulty difficulty, int stepCount) {
-        if (stepCount < 0) throw new IllegalArgumentException("Step count must be positive");
+        if (stepCount < 0) throw new ValidationException("Step count must be positive");
         return Difficulty.values()[Math.min(difficulty.ordinal() + stepCount, Difficulty.values().length - 1)];
     }
 }
