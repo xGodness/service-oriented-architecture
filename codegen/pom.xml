@@ -13,6 +13,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>ru.xgodness</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
             <version>3.19.8</version>

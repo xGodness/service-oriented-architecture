@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class DefaultExceptionHandler implements ExceptionMapper<RuntimeException> {
     @Override
     public Response toResponse(RuntimeException ex) {
-        log.warning("Caught UNHANDLED WebApplicationException: " + ex.getMessage());
+        log.warning("Caught UNHANDLED WebApplicationException: [%s] %s".formatted(ex.getClass(), ex.getMessage()));
         log.warning(ex.getMessage());
         log.warning(Arrays.stream(ex.getStackTrace()).map(Object::toString).collect(Collectors.joining("\n")));
         return Response
