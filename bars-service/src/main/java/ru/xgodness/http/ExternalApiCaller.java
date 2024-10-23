@@ -10,7 +10,7 @@ import ru.xgodness.endpoint.labworks.dto.LabworkPage;
 @Log
 public class ExternalApiCaller {
     private static final RestTemplate restTemplate = new RestTemplate();
-    private static final String labworksServiceUrl = "https://localhost:9172/labworks-service/api/v1";
+    private static final String labworksServiceUrl = "https://localhost:5269/labworks-service/api/v1";
 
     public static Labwork getLabworkById(long id) {
         return restTemplate.getForEntity(labworksServiceUrl + "/labworks/%d".formatted(id), Labwork.class).getBody();

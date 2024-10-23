@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Coordinates {
-    private long x;
+    private Long x;
     private Integer y;
 }

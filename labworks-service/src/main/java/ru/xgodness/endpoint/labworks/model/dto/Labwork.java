@@ -14,7 +14,7 @@ public class Labwork {
     private String name;
     private Coordinates coordinates;
     private java.time.LocalDate creationDate;
-    private double minimalPoint;
+    private Double minimalPoint;
     private Difficulty difficulty;
     private Discipline discipline;
 }

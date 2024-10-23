@@ -36,7 +36,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         log.info("Caught MethodArgumentTypeMismatchException: " + ex.getMessage());
         return super.handleExceptionInternal(
                 ex,
-                new ErrorMessages(ex.getMessage()),
+                new ErrorMessages("Required path parameter is invalid (e.g. too large for numeric types)"),
                 new HttpHeaders(),
                 HttpStatus.BAD_REQUEST,
                 webRequest);
@@ -54,7 +54,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(value = {ValidationException.class})
     protected ResponseEntity<Object> handle(ValidationException ex, WebRequest webRequest) {
-        log.info("Caught ValidationException: " + ex.getMessage());
+        log.info("Caught ValidationException: " + ex.getErrorMessages().getMessages());
         return super.handleExceptionInternal(ex,
                 ex.getErrorMessages(),
                 new HttpHeaders(),
