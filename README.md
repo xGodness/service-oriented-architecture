@@ -20,7 +20,7 @@ self-signed certificate should be added to the WildFly's truststore.
    ```
 4. Store `wildfly-truststore.jks` somewhere inside `${WILDFLY_HOME}` directory (just for convenience, it's optional):
    ```shell
-   mv wildfly-truststore.jks ${WILDFLY_HOME}/standalone/configuration
+   mv wildfly-truststore.jks $WILDFLY_HOME/standalone/configuration
    ```
 5. Add `JAVA_OPTS` to the `${WILDFLY_HOME}/bin/standalone.conf` to tell WildFly where to find new truststore:
    ```
