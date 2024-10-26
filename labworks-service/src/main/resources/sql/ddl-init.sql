@@ -5,26 +5,26 @@ EXCEPTION
 END $$;
 
 CREATE TABLE IF NOT EXISTS faculty (
-    name                varchar(255)    PRIMARY KEY     CHECK (name <> '')
+    name                text            PRIMARY KEY     CHECK (name <> '')
 );
 
 CREATE TABLE IF NOT EXISTS discipline (
-    name                varchar(255)    NOT NULL        CHECK (name <> ''),
-    faculty             varchar(255)    NOT NULL        REFERENCES faculty(name),
+    name                text            NOT NULL        CHECK (name <> ''),
+    faculty             text            NOT NULL        REFERENCES faculty(name),
     self_study_hours    integer         NOT NULL,
     PRIMARY KEY (name, faculty)
 );
 
 CREATE TABLE IF NOT EXISTS labwork (
     id                  bigint          PRIMARY KEY     GENERATED ALWAYS AS IDENTITY,
-    name                varchar(255)    NOT NULL        CHECK (name <> ''),
+    name                text            NOT NULL        CHECK (name <> ''),
     coordinate_x        bigint          NOT NULL        CHECK (coordinate_x >= -896),
     coordinate_y        integer         NOT NULL        CHECK (coordinate_y >= -528),
     creation_date       date            NOT NULL,
     minimal_point       float           NOT NULL        CHECK (minimal_point > 0),
     difficulty          difficulty_t    NOT NULL,
-    faculty             varchar(255)    NOT NULL,
-    discipline          varchar(255)    NOT NULL,
+    faculty             text            NOT NULL,
+    discipline          text            NOT NULL,
     FOREIGN KEY (faculty, discipline) REFERENCES discipline(faculty, name)
 );
 

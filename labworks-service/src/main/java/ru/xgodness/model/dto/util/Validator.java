@@ -72,7 +72,6 @@ public class Validator {
 
     private static Optional<String> validateStringField(String value, String fieldName) {
         if (value == null || value.isEmpty()) return Optional.of(fieldName + " must not be null or empty");
-        if (value.length() > 255) return Optional.of(fieldName + " length must not be greater than 255 characters");
         return Optional.empty();
     }
 }

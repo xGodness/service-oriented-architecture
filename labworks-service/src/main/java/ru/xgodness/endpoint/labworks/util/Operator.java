@@ -19,7 +19,7 @@ public enum Operator {
     }
 
     public static Operator fromString(String literal) {
-        if (literal == null) return null;
+        if (literal == null) throw new IllegalArgumentException("Operator must not be null");
         if (literal.equals("~")) return LIKE;
 
         return Operator.valueOf(literal.toUpperCase());

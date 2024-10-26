@@ -32,9 +32,13 @@ public class FilteringQueryToken extends QueryToken {
     }
 
     private void setOperator(String operator) {
-        this.operator = Operator.fromString(operator);
-        if (this.operator == null)
-            throw new UnexpectedInputFormatException("Cannot parse operator name, must be one of: " + Arrays.stream(Operator.values()).map(Operator::getLiteral));
+        try {
+            this.operator = Operator.fromString(operator);
+        } catch (IllegalArgumentException ex) {
+            throw new UnexpectedInputFormatException("Cannot parse operator name, must be one of: "
+                    + Arrays.stream(Operator.values()).map(Operator::getLiteral).collect(Collectors.joining(", ")));
+        }
+
     }
 
     private void setValue(String value) {

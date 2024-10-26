@@ -66,7 +66,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest webRequest) {
         log.info("Caught NoHandlerFoundException: " + ex.getMessage());
         return super.handleExceptionInternal(ex,
-                new ErrorMessages("Not found"),
+                new ErrorMessages("Resource not found"),
                 new HttpHeaders(),
                 HttpStatus.NOT_FOUND,
                 webRequest);
