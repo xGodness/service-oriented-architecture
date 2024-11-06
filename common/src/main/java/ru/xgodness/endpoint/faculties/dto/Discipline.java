@@ -11,5 +11,5 @@ import lombok.*;
 public class Discipline {
     private String faculty;
     private String name;
-    private int selfStudyHours;
+    private long selfStudyHours;
 }

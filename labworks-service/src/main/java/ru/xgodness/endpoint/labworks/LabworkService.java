@@ -70,8 +70,11 @@ public class LabworkService {
                         LABWORK.MINIMAL_POINT,
                         LABWORK.DIFFICULTY,
                         LABWORK.FACULTY,
-                        LABWORK.DISCIPLINE)
-                .from(LABWORK)
+                        LABWORK.DISCIPLINE,
+                        LABWORK.discipline().SELF_STUDY_HOURS)
+                .from(
+                        LABWORK.join(LABWORK.discipline())
+                                .on(LABWORK.DISCIPLINE.eq(LABWORK.discipline().NAME)))
                 .where(conditions)
                 .orderBy(sortFields);
 

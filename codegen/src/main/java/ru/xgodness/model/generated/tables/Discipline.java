@@ -71,17 +71,17 @@ public class Discipline extends TableImpl<DisciplineRecord> {
     /**
      * The column <code>public.discipline.name</code>.
      */
-    public final TableField<DisciplineRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<DisciplineRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.discipline.faculty</code>.
      */
-    public final TableField<DisciplineRecord, String> FACULTY = createField(DSL.name("faculty"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<DisciplineRecord, String> FACULTY = createField(DSL.name("faculty"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.discipline.self_study_hours</code>.
      */
-    public final TableField<DisciplineRecord, Integer> SELF_STUDY_HOURS = createField(DSL.name("self_study_hours"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DisciplineRecord, Long> SELF_STUDY_HOURS = createField(DSL.name("self_study_hours"), SQLDataType.BIGINT.nullable(false), this, "");
 
     private Discipline(Name alias, Table<DisciplineRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -188,7 +188,7 @@ public class Discipline extends TableImpl<DisciplineRecord> {
     @Override
     public List<Check<DisciplineRecord>> getChecks() {
         return Arrays.asList(
-            Internal.createCheck(this, DSL.name("discipline_name_check"), "(((name)::text <> ''::text))", true)
+            Internal.createCheck(this, DSL.name("discipline_name_check"), "((name <> ''::text))", true)
         );
     }
 

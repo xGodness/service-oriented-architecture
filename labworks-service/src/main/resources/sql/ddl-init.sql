@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS faculty (
 CREATE TABLE IF NOT EXISTS discipline (
     name                text            NOT NULL        CHECK (name <> ''),
     faculty             text            NOT NULL        REFERENCES faculty(name),
-    self_study_hours    integer         NOT NULL,
+    self_study_hours    bigint          NOT NULL,
     PRIMARY KEY (name, faculty)
 );
 

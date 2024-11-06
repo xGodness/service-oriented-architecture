@@ -5,12 +5,13 @@ import org.jooq.Condition;
 import ru.xgodness.exception.UnexpectedInputFormatException;
 import ru.xgodness.exception.ValidationException;
 import ru.xgodness.model.generated.enums.DifficultyT;
-import ru.xgodness.model.generated.tables.Labwork;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import static ru.xgodness.model.generated.tables.Labwork.LABWORK;
 
 @Getter
 public class FilteringQueryToken extends QueryToken {
@@ -98,6 +99,13 @@ public class FilteringQueryToken extends QueryToken {
                 if (value.isEmpty()) throw new UnexpectedInputFormatException("Discipline name must not be empty");
                 yield value;
             }
+            case DISCIPLINE_SELF_STUDY_HOURS -> {
+                try {
+                    yield Long.parseLong(value);
+                } catch (NumberFormatException ex) {
+                    throw new UnexpectedInputFormatException("Discipline self study hours must be long type");
+                }
+            }
         };
     }
 
@@ -111,77 +119,83 @@ public class FilteringQueryToken extends QueryToken {
     public Condition mapToCondition() {
         return switch (getOperator()) {
             case LT -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.lessThan((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.lessThan((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.lessThan((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.lessThan((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.lessThan((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.lessThan((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.lessThan((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.lessThan((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.lessThan((String) getValue());
+                case ID -> LABWORK.ID.lessThan((Long) getValue());
+                case NAME -> LABWORK.NAME.lessThan((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.lessThan((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.lessThan((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.lessThan((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.lessThan((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.lessThan((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.lessThan((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.lessThan((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.lessThan((Long) getValue());
             };
             case LTE -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.lessOrEqual((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.lessOrEqual((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.lessOrEqual((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.lessOrEqual((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.lessOrEqual((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.lessOrEqual((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.lessOrEqual((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.lessOrEqual((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.lessOrEqual((String) getValue());
+                case ID -> LABWORK.ID.lessOrEqual((Long) getValue());
+                case NAME -> LABWORK.NAME.lessOrEqual((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.lessOrEqual((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.lessOrEqual((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.lessOrEqual((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.lessOrEqual((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.lessOrEqual((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.lessOrEqual((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.lessOrEqual((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.lessOrEqual((Long) getValue());
             };
             case GT -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.greaterThan((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.greaterThan((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.greaterThan((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.greaterThan((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.greaterThan((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.greaterThan((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.greaterThan((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.greaterThan((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.greaterThan((String) getValue());
+                case ID -> LABWORK.ID.greaterThan((Long) getValue());
+                case NAME -> LABWORK.NAME.greaterThan((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.greaterThan((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.greaterThan((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.greaterThan((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.greaterThan((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.greaterThan((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.greaterThan((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.greaterThan((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.greaterThan((Long) getValue());
             };
             case GTE -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.greaterOrEqual((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.greaterOrEqual((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.greaterOrEqual((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.greaterOrEqual((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.greaterOrEqual((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.greaterOrEqual((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.greaterOrEqual((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.greaterOrEqual((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.greaterOrEqual((String) getValue());
+                case ID -> LABWORK.ID.greaterOrEqual((Long) getValue());
+                case NAME -> LABWORK.NAME.greaterOrEqual((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.greaterOrEqual((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.greaterOrEqual((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.greaterOrEqual((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.greaterOrEqual((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.greaterOrEqual((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.greaterOrEqual((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.greaterOrEqual((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.greaterOrEqual((Long) getValue());
             };
             case EQ -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.equal((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.equal((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.equal((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.equal((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.equal((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.equal((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.equal((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.equal((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.equal((String) getValue());
+                case ID -> LABWORK.ID.equal((Long) getValue());
+                case NAME -> LABWORK.NAME.equal((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.equal((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.equal((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.equal((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.equal((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.equal((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.equal((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.equal((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.equal((Long) getValue());
             };
             case NEQ -> switch (getField()) {
-                case ID -> Labwork.LABWORK.ID.notEqual((Long) getValue());
-                case NAME -> Labwork.LABWORK.NAME.notEqual((String) getValue());
-                case COORDINATE_X -> Labwork.LABWORK.COORDINATE_X.notEqual((Long) getValue());
-                case COORDINATE_Y -> Labwork.LABWORK.COORDINATE_Y.notEqual((Integer) getValue());
-                case CREATION_DATE -> Labwork.LABWORK.CREATION_DATE.notEqual((LocalDate) getValue());
-                case MINIMAL_POINT -> Labwork.LABWORK.MINIMAL_POINT.notEqual((Double) getValue());
-                case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY.notEqual((DifficultyT) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.notEqual((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.notEqual((String) getValue());
+                case ID -> LABWORK.ID.notEqual((Long) getValue());
+                case NAME -> LABWORK.NAME.notEqual((String) getValue());
+                case COORDINATE_X -> LABWORK.COORDINATE_X.notEqual((Long) getValue());
+                case COORDINATE_Y -> LABWORK.COORDINATE_Y.notEqual((Integer) getValue());
+                case CREATION_DATE -> LABWORK.CREATION_DATE.notEqual((LocalDate) getValue());
+                case MINIMAL_POINT -> LABWORK.MINIMAL_POINT.notEqual((Double) getValue());
+                case DIFFICULTY -> LABWORK.DIFFICULTY.notEqual((DifficultyT) getValue());
+                case FACULTY -> LABWORK.FACULTY.notEqual((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.notEqual((String) getValue());
+                case DISCIPLINE_SELF_STUDY_HOURS -> LABWORK.discipline().SELF_STUDY_HOURS.notEqual((Long) getValue());
             };
             case LIKE -> switch (getField()) {
-                case ID, COORDINATE_X, COORDINATE_Y, CREATION_DATE, MINIMAL_POINT, DIFFICULTY ->
+                case ID, COORDINATE_X, COORDINATE_Y, CREATION_DATE, MINIMAL_POINT, DIFFICULTY, DISCIPLINE_SELF_STUDY_HOURS ->
                         throw new UnexpectedInputFormatException("Operator '~' (like) is supported only for string fields");
-                case NAME -> Labwork.LABWORK.NAME.contains((String) getValue());
-                case FACULTY -> Labwork.LABWORK.FACULTY.contains((String) getValue());
-                case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE.contains((String) getValue());
+                case NAME -> LABWORK.NAME.contains((String) getValue());
+                case FACULTY -> LABWORK.FACULTY.contains((String) getValue());
+                case DISCIPLINE_NAME -> LABWORK.DISCIPLINE.contains((String) getValue());
             };
         };
     }

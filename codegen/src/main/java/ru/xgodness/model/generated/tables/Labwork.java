@@ -78,7 +78,7 @@ public class Labwork extends TableImpl<LabworkRecord> {
     /**
      * The column <code>public.labwork.name</code>.
      */
-    public final TableField<LabworkRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<LabworkRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.labwork.coordinate_x</code>.
@@ -108,12 +108,12 @@ public class Labwork extends TableImpl<LabworkRecord> {
     /**
      * The column <code>public.labwork.faculty</code>.
      */
-    public final TableField<LabworkRecord, String> FACULTY = createField(DSL.name("faculty"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<LabworkRecord, String> FACULTY = createField(DSL.name("faculty"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.labwork.discipline</code>.
      */
-    public final TableField<LabworkRecord, String> DISCIPLINE = createField(DSL.name("discipline"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<LabworkRecord, String> DISCIPLINE = createField(DSL.name("discipline"), SQLDataType.CLOB.nullable(false), this, "");
 
     private Labwork(Name alias, Table<LabworkRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -215,7 +215,7 @@ public class Labwork extends TableImpl<LabworkRecord> {
             Internal.createCheck(this, DSL.name("labwork_coordinate_x_check"), "((coordinate_x >= '-896'::integer))", true),
             Internal.createCheck(this, DSL.name("labwork_coordinate_y_check"), "((coordinate_y >= '-528'::integer))", true),
             Internal.createCheck(this, DSL.name("labwork_minimal_point_check"), "((minimal_point > (0)::double precision))", true),
-            Internal.createCheck(this, DSL.name("labwork_name_check"), "(((name)::text <> ''::text))", true)
+            Internal.createCheck(this, DSL.name("labwork_name_check"), "((name <> ''::text))", true)
         );
     }
 

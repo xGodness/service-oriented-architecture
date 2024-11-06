@@ -70,7 +70,7 @@ public class Faculty extends TableImpl<FacultyRecord> {
     /**
      * The column <code>public.faculty.name</code>.
      */
-    public final TableField<FacultyRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FacultyRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
 
     private Faculty(Name alias, Table<FacultyRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -160,7 +160,7 @@ public class Faculty extends TableImpl<FacultyRecord> {
     @Override
     public List<Check<FacultyRecord>> getChecks() {
         return Arrays.asList(
-            Internal.createCheck(this, DSL.name("faculty_name_check"), "(((name)::text <> ''::text))", true)
+            Internal.createCheck(this, DSL.name("faculty_name_check"), "((name <> ''::text))", true)
         );
     }
 

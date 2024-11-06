@@ -58,15 +58,15 @@ public class DisciplineRecord extends UpdatableRecordImpl<DisciplineRecord> {
     /**
      * Setter for <code>public.discipline.self_study_hours</code>.
      */
-    public void setSelfStudyHours(Integer value) {
+    public void setSelfStudyHours(Long value) {
         set(2, value);
     }
 
     /**
      * Getter for <code>public.discipline.self_study_hours</code>.
      */
-    public Integer getSelfStudyHours() {
-        return (Integer) get(2);
+    public Long getSelfStudyHours() {
+        return (Long) get(2);
     }
 
     // -------------------------------------------------------------------------
@@ -92,7 +92,7 @@ public class DisciplineRecord extends UpdatableRecordImpl<DisciplineRecord> {
     /**
      * Create a detached, initialised DisciplineRecord
      */
-    public DisciplineRecord(String name, String faculty, Integer selfStudyHours) {
+    public DisciplineRecord(String name, String faculty, Long selfStudyHours) {
         super(Discipline.DISCIPLINE);
 
         setName(name);

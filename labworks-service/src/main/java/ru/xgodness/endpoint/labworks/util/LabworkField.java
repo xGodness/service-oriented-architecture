@@ -2,11 +2,7 @@ package ru.xgodness.endpoint.labworks.util;
 
 import lombok.Getter;
 import org.jooq.TableField;
-import ru.xgodness.model.generated.enums.DifficultyT;
 import ru.xgodness.model.generated.tables.Labwork;
-import ru.xgodness.model.generated.tables.records.LabworkRecord;
-
-import java.time.LocalDate;
 
 @Getter
 public enum LabworkField {
@@ -18,7 +14,8 @@ public enum LabworkField {
     MINIMAL_POINT("minimal_point"),
     DIFFICULTY("difficulty"),
     FACULTY("faculty"),
-    DISCIPLINE_NAME("discipline_name");
+    DISCIPLINE_NAME("discipline_name"),
+    DISCIPLINE_SELF_STUDY_HOURS("discipline_self_study_hours");
 
     private final String literal;
 
@@ -30,7 +27,7 @@ public enum LabworkField {
         return literal == null ? null : LabworkField.valueOf(literal.toUpperCase());
     }
 
-    public TableField<LabworkRecord, ?> mapToJooqField() {
+    public TableField<?, ?> mapToJooqField() {
         return switch (this) {
             case ID -> Labwork.LABWORK.ID;
             case NAME -> Labwork.LABWORK.NAME;
@@ -41,17 +38,7 @@ public enum LabworkField {
             case DIFFICULTY -> Labwork.LABWORK.DIFFICULTY;
             case FACULTY -> Labwork.LABWORK.FACULTY;
             case DISCIPLINE_NAME -> Labwork.LABWORK.DISCIPLINE;
-        };
-    }
-
-    public Class<?> mapToClass() {
-        return switch (this) {
-            case ID, COORDINATE_X -> Long.class;
-            case NAME, FACULTY, DISCIPLINE_NAME -> String.class;
-            case COORDINATE_Y -> Integer.class;
-            case CREATION_DATE -> LocalDate.class;
-            case MINIMAL_POINT -> Double.class;
-            case DIFFICULTY -> DifficultyT.class;
+            case DISCIPLINE_SELF_STUDY_HOURS -> Labwork.LABWORK.discipline().SELF_STUDY_HOURS;
         };
     }
 }

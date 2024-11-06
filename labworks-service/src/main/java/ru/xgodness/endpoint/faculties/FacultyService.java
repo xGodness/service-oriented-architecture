@@ -73,7 +73,7 @@ public class FacultyService {
     public static Discipline storeDiscipline(Discipline dto) {
         String faculty = dto.getFaculty();
         String disciplineName = dto.getName();
-        int selfStudyHours = dto.getSelfStudyHours();
+        long selfStudyHours = dto.getSelfStudyHours();
         if (!facultyExists(faculty))
             throw new NotFoundException("Faculty %s was not found".formatted(faculty));
         if (disciplineExists(faculty, disciplineName))
@@ -105,7 +105,7 @@ public class FacultyService {
                 DISCIPLINE.FACULTY.eq(faculty)).isPresent();
     }
 
-    public static int getSelfStudyHours(String faculty, String disciplineName) {
+    public static long getSelfStudyHours(String faculty, String disciplineName) {
         var recordOpt = context.fetchOptional(DISCIPLINE, DISCIPLINE.FACULTY.eq(faculty), DISCIPLINE.NAME.eq(disciplineName));
         recordOpt.orElseThrow(() -> new NotFoundException("Discipline with name %s does not exist".formatted(disciplineName)));
         return recordOpt.get().getSelfStudyHours();
