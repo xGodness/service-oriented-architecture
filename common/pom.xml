@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.xgodness</groupId>
-        <artifactId>2-lab</artifactId>
+        <artifactId>3-lab</artifactId>
         <version>1.0</version>
     </parent>
 

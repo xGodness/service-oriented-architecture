@@ -1,8 +1,11 @@
 package ru.xgodness;
 
-import jakarta.ws.rs.ApplicationPath;
-import jakarta.ws.rs.core.Application;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ApplicationPath("/api/v1")
-public class LabworksApplication extends Application {
+@SpringBootApplication
+public class LabworksApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(LabworksApplication.class, args);
+    }
 }

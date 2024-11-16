@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.xgodness</groupId>
-    <artifactId>2-lab</artifactId>
+    <artifactId>3-lab</artifactId>
     <packaging>pom</packaging>
 
     <properties>
@@ -12,14 +12,14 @@
     </properties>
 
     <modules>
-        <module>labworks-service</module>
         <module>bars-service</module>
         <module>common</module>
         <module>codegen</module>
+        <module>labworks-service</module>
     </modules>
 
     <version>1.0</version>
-    <name>soa-2-lab</name>
+    <name>soa-3-lab</name>
 
     <dependencies>
         <dependency>
@@ -30,7 +30,7 @@
     </dependencies>
 
     <build>
-        <finalName>soa-2-lab</finalName>
+        <finalName>soa-3-lab</finalName>
     </build>
 
 </project>

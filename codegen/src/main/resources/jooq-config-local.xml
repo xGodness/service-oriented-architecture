@@ -27,7 +27,7 @@
 
         <target>
             <packageName>ru.xgodness.model.generated</packageName>
-            <directory>/home/xgodness/service-oriented-architecture/2-lab/codegen/src/main/java</directory>
+            <directory>/home/xgodness/service-oriented-architecture/codegen/src/main/java</directory>
         </target>
     </generator>
 </configuration>

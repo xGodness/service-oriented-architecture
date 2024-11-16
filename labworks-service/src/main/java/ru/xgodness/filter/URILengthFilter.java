@@ -1,30 +1,40 @@
 package ru.xgodness.filter;
 
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.container.PreMatching;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.java.Log;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import ru.xgodness.exception.dto.ErrorMessages;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 @Log
-@Provider
-@PreMatching
-public class URILengthFilter implements ContainerRequestFilter {
+@Component
+@Order(1)
+public class URILengthFilter implements Filter {
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ErrorMessages errorMessage = new ErrorMessages("Request URI is too long");
 
     @Override
-    public void filter(ContainerRequestContext requestContext) {
-        if (requestContext.getUriInfo().getRequestUri().toString().length() > 1024) {
-            log.info("Too long URI in request: " + requestContext.getUriInfo().getRequestUri());
-            requestContext.abortWith(
-                    Response
-                            .status(414)
-                            .type(MediaType.APPLICATION_JSON)
-                            .entity(new ErrorMessages("Request URI is too long"))
-                            .build()
-            );
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        if (servletRequest instanceof HttpServletRequest httpServletRequest) {
+            String uriWithQuery = "%s?%s".formatted(httpServletRequest.getRequestURI(), httpServletRequest.getQueryString());
+
+            if (uriWithQuery.length() > 1024) {
+                log.info("URILengthFilter: aborting request, URI too long");
+
+                servletResponse.setContentType("application/json;charset=UTF-8");
+                ((HttpServletResponse) servletResponse).setStatus(414);
+                PrintWriter out = servletResponse.getWriter();
+                out.print(mapper.writeValueAsString(errorMessage));
+                out.flush();
+            }
         }
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

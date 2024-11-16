@@ -1,8 +1,8 @@
 package ru.xgodness.endpoint.labworks.util;
 
-import jakarta.ws.rs.core.MultivaluedMap;
 import lombok.Getter;
 import org.jooq.Condition;
+import org.springframework.util.MultiValueMap;
 import ru.xgodness.exception.ApplicationException;
 import ru.xgodness.exception.UnexpectedInputFormatException;
 
@@ -20,7 +20,7 @@ public class QueryContext {
     private final Long offset;
     private final List<String> errorMessages = new ArrayList<>();
 
-    public QueryContext(MultivaluedMap<String, String> queryParamsMap) {
+    public QueryContext(MultiValueMap<String, String> queryParamsMap) {
 
         this.filteringTokens = parseFilteringTokens(queryParamsMap);
         this.sortingTokens = parseSortingTokens(queryParamsMap);
@@ -30,7 +30,7 @@ public class QueryContext {
         if (!errorMessages.isEmpty()) throw new UnexpectedInputFormatException(errorMessages);
     }
 
-    private List<FilteringQueryToken> parseFilteringTokens(MultivaluedMap<String, String> queryParamsMap) {
+    private List<FilteringQueryToken> parseFilteringTokens(MultiValueMap<String, String> queryParamsMap) {
         List<String> filteringParams = queryParamsMap.get("filter");
         if (filteringParams == null) return List.of();
         return IntStream.range(0, filteringParams.size())
@@ -48,7 +48,7 @@ public class QueryContext {
                 }).toList();
     }
 
-    private List<SortingQueryToken> parseSortingTokens(MultivaluedMap<String, String> queryParamsMap) {
+    private List<SortingQueryToken> parseSortingTokens(MultiValueMap<String, String> queryParamsMap) {
         List<String> sortingParams = queryParamsMap.get("sort");
         if (sortingParams == null) return List.of();
 
@@ -79,7 +79,7 @@ public class QueryContext {
         return parsedTokenList;
     }
 
-    private Long parseLimit(MultivaluedMap<String, String> queryParamsMap) {
+    private Long parseLimit(MultiValueMap<String, String> queryParamsMap) {
         List<String> limitList = queryParamsMap.get("limit");
         if (limitList == null) return null;
         try {
@@ -97,7 +97,7 @@ public class QueryContext {
         return null;
     }
 
-    private Long parseOffset(MultivaluedMap<String, String> queryParamsMap) {
+    private Long parseOffset(MultiValueMap<String, String> queryParamsMap) {
         List<String> offsetList = queryParamsMap.get("offset");
         if (offsetList == null) return null;
         try {

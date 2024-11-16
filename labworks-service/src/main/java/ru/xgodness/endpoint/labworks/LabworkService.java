@@ -1,10 +1,10 @@
 package ru.xgodness.endpoint.labworks;
 
-import jakarta.ws.rs.core.MultivaluedMap;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SortField;
+import org.springframework.util.MultiValueMap;
 import ru.xgodness.endpoint.faculties.FacultyService;
 import ru.xgodness.endpoint.faculties.dto.Discipline;
 import ru.xgodness.endpoint.labworks.model.dto.Coordinates;
@@ -53,7 +53,7 @@ public class LabworkService {
         return dto;
     }
 
-    public static LabworkPage getAllLabworks(MultivaluedMap<String, String> queryParams) {
+    public static LabworkPage getAllLabworks(MultiValueMap<String, String> queryParams) {
         QueryContext queryContext = new QueryContext(queryParams);
 
         List<Condition> conditions = queryContext.mapFilteringTokensToConditions();

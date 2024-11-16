@@ -1,32 +1,40 @@
 package ru.xgodness.filter;
 
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.container.PreMatching;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.java.Log;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
-import java.net.URI;
+import java.io.IOException;
 
 @Log
-@Provider
-@PreMatching
-public class RedirectHttpFilter implements ContainerRequestFilter {
-    private static final String HTTPS_PORT = ":9172";
+@Component
+@Order(3)
+public class RedirectHttpFilter implements Filter {
+    private static final int HTTPS_PORT = 5269;
 
     @Override
-    public void filter(ContainerRequestContext requestContext) {
-        URI requestUri = requestContext.getUriInfo().getRequestUri();
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        if (servletRequest instanceof HttpServletRequest httpServletRequest
+                && "http".equalsIgnoreCase(httpServletRequest.getScheme())) {
+            String httpQuery = httpServletRequest.getQueryString();
+            log.info("Redirecting HTTP request: " + httpServletRequest.getRequestURI() + (httpQuery == null ? "" : "?" + httpQuery));
 
-        if ("http".equalsIgnoreCase(requestUri.getScheme())) {
-            log.info("Redirecting HTTP request: " + requestContext.getUriInfo().getRequestUri());
-            String httpQuery = requestUri.getRawQuery();
             String httpsQuery = httpQuery == null ? "" : "?" + httpQuery;
 
-            URI httpsUri = URI.create("https://" + requestUri.getHost() + HTTPS_PORT + requestUri.getRawPath() + httpsQuery);
-            log.info("Redirecting to: " + httpsUri);
-            requestContext.abortWith(Response.status(301).location(httpsUri).build());
+            String httpsUri = "https://%s:%d%s".formatted(
+                    httpServletRequest.getServerName(),
+                    HTTPS_PORT,
+                    httpServletRequest.getRequestURI() + httpsQuery);
+
+            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+            httpServletResponse.setStatus(307);
+            httpServletResponse.addHeader("Location", httpsUri);
         }
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

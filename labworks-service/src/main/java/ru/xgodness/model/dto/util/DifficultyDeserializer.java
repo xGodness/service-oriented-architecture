@@ -1,19 +1,17 @@
 package ru.xgodness.model.dto.util;
 
-import jakarta.json.bind.serializer.DeserializationContext;
-import jakarta.json.bind.serializer.JsonbDeserializer;
-import jakarta.json.stream.JsonParser;
-import jakarta.ws.rs.ext.Provider;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import ru.xgodness.endpoint.labworks.model.dto.Difficulty;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 
-@Provider
-public class DifficultyDeserializer implements JsonbDeserializer<Difficulty> {
+public class DifficultyDeserializer extends JsonDeserializer<Difficulty> {
     @Override
-    public Difficulty deserialize(JsonParser jsonParser, DeserializationContext deserializationContext, Type type) {
+    public Difficulty deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         return Difficulty.fromString(
-                jsonParser.getString().toUpperCase()
+                jsonParser.getValueAsString().toUpperCase()
         );
     }
 }
