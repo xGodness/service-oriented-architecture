@@ -1,0 +1,11 @@
+.App {
+
+}
+.LabworksList{
+    width: max-content;
+}
+
+.Link{
+    text-decoration: none;
+    color: inherit;
+}
