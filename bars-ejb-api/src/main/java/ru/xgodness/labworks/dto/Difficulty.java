@@ -1,10 +1,12 @@
-package ru.xgodness.endpoint.labworks.dto;
+package ru.xgodness.labworks.dto;
 
 import lombok.Getter;
 import ru.xgodness.exception.ValidationException;
 
+import java.io.Serializable;
+
 @Getter
-public enum Difficulty {
+public enum Difficulty implements Serializable {
     VERY_EASY("very_easy"),
     EASY("easy"),
     HARD("hard"),

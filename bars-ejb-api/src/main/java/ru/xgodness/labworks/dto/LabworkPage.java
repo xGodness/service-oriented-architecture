@@ -1,7 +1,8 @@
-package ru.xgodness.endpoint.labworks.dto;
+package ru.xgodness.labworks.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-public class LabworkPage {
+public class LabworkPage implements Serializable {
     private List<Labwork> elements;
     private long totalCount;
 }

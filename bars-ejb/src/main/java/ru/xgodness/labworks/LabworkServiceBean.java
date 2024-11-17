@@ -1,12 +1,14 @@
-package ru.xgodness.endpoint.labworks;
+package ru.xgodness.labworks;
 
-import ru.xgodness.endpoint.labworks.dto.Difficulty;
-import ru.xgodness.endpoint.labworks.dto.Labwork;
+import jakarta.ejb.Stateless;
+import ru.xgodness.labworks.dto.Difficulty;
+import ru.xgodness.labworks.dto.Labwork;
 import ru.xgodness.http.ExternalApiCaller;
 import ru.xgodness.http.LabworkRequestBody;
 
-public class LabworkService {
-    public static Labwork increaseDifficultyByStepCount(long id, int stepCount) {
+@Stateless(name = "LabworkService")
+public class LabworkServiceBean implements LabworkService  {
+    public Labwork increaseDifficultyByStepCount(long id, int stepCount) {
         Labwork labwork = ExternalApiCaller.getLabworkById(id);
         labwork.setDifficulty(
                 Difficulty.increase(labwork.getDifficulty(), stepCount)

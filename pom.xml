@@ -16,6 +16,8 @@
         <module>common</module>
         <module>codegen</module>
         <module>labworks-service</module>
+        <module>bars-ejb</module>
+        <module>bars-ejb-api</module>
     </modules>
 
     <version>1.0</version>

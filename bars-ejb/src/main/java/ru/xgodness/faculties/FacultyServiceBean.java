@@ -1,15 +1,20 @@
-package ru.xgodness.endpoint.faculties;
+package ru.xgodness.faculties;
 
-import ru.xgodness.endpoint.labworks.dto.LabworkPage;
+import jakarta.ejb.Stateless;
 import ru.xgodness.http.ExternalApiCaller;
 import ru.xgodness.http.LabworkRequestBody;
+import ru.xgodness.labworks.dto.LabworkPage;
 
-public class FacultyService {
-    public static void checkFacultyAndDisciplineExistence(String faculty, String disciplineName) {
+@Stateless(name = "FacultyService")
+public class FacultyServiceBean implements FacultyService {
+
+    @Override
+    public void checkFacultyAndDisciplineExistence(String faculty, String disciplineName) {
         ExternalApiCaller.checkFacultyAndDisciplineExistence(faculty, disciplineName);
     }
 
-    public static void makeHardcore(String faculty, String disciplineName) {
+    @Override
+    public void makeHardcore(String faculty, String disciplineName) {
         LabworkPage labworkPage = ExternalApiCaller.getTenMostDifficultLabworks(faculty, disciplineName);
         labworkPage.getElements().stream()
                 .map(labwork -> LabworkRequestBody.mapLabworkAndChangeDiscipline(labwork, faculty, disciplineName))
