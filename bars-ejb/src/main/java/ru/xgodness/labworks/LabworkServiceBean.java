@@ -1,13 +1,15 @@
 package ru.xgodness.labworks;
 
 import jakarta.ejb.Stateless;
-import ru.xgodness.labworks.dto.Difficulty;
-import ru.xgodness.labworks.dto.Labwork;
+import org.jboss.ejb3.annotation.Pool;
 import ru.xgodness.http.ExternalApiCaller;
 import ru.xgodness.http.LabworkRequestBody;
+import ru.xgodness.labworks.dto.Difficulty;
+import ru.xgodness.labworks.dto.Labwork;
 
 @Stateless(name = "LabworkService")
-public class LabworkServiceBean implements LabworkService  {
+@Pool("slsb-strict-max-pool")
+public class LabworkServiceBean implements LabworkService {
     public Labwork increaseDifficultyByStepCount(long id, int stepCount) {
         Labwork labwork = ExternalApiCaller.getLabworkById(id);
         labwork.setDifficulty(
