@@ -12,12 +12,18 @@ import java.util.Properties;
 @Log
 public class JNDIServiceProvider {
     private static final int BARS_EJB_PORT = 9080;
+    private static final String BARS_EJB_URL = "http-remoting://bars-ejb:%d".formatted(BARS_EJB_PORT);
+    private static final String BARS_EJB_USERNAME = "user";
+    private static final String BARS_EJB_PASSWORD = "password";
+
     private static final Context context;
 
     static {
         Properties jndiProperties = new Properties();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
-        jndiProperties.put(Context.PROVIDER_URL, "http-remoting://localhost:%d".formatted(BARS_EJB_PORT));
+        jndiProperties.put(Context.PROVIDER_URL, BARS_EJB_URL);
+        jndiProperties.put(Context.SECURITY_PRINCIPAL, BARS_EJB_USERNAME);
+        jndiProperties.put(Context.SECURITY_CREDENTIALS, BARS_EJB_PASSWORD);
         try {
             context = new InitialContext(jndiProperties);
         } catch (NamingException ex) {

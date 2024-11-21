@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: soa
+    ports:
+      - 5444:5432
+    networks:
+      - soa-network
+    restart: unless-stopped
+    volumes:
+      - ./labworks-service/src/main/resources/sql/ddl-init.sql:/docker-entrypoint-initdb.d/1-ddl-init.sql
+      - ./labworks-service/src/main/resources/sql/dml-init.sql:/docker-entrypoint-initdb.d/2-dml-init.sql
+
+  labworks-service:
+    build:
+      context: .
+      dockerfile: ./labworks-service/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 5269:5269 # https port
+      - 5268:5268 # http port
+    networks:
+      - soa-network
+
+  bars-ejb:
+    build:
+      context: .
+      dockerfile: ./bars-ejb/Dockerfile
+    ports:
+      - 9080:9080
+    networks:
+      - soa-network
+
+  bars-service:
+    build:
+      context: .
+      dockerfile: ./bars-service/Dockerfile
+    depends_on:
+      - bars-ejb
+    ports:
+      - 9677:9677 # https port
+      - 9676:9676 # http port
+    networks:
+      - soa-network
+
+networks:
+  soa-network:
+    driver: bridge
