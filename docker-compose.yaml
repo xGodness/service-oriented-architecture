@@ -7,12 +7,12 @@ services:
       POSTGRES_DB: soa
     ports:
       - 5444:5432
-    networks:
-      - soa-network
-    restart: unless-stopped
     volumes:
       - ./labworks-service/src/main/resources/sql/ddl-init.sql:/docker-entrypoint-initdb.d/1-ddl-init.sql
       - ./labworks-service/src/main/resources/sql/dml-init.sql:/docker-entrypoint-initdb.d/2-dml-init.sql
+    restart: unless-stopped
+    networks:
+      - soa-network
 
   labworks-service:
     build:
@@ -23,6 +23,7 @@ services:
     ports:
       - 5269:5269 # https port
       - 5268:5268 # http port
+    restart: unless-stopped
     networks:
       - soa-network
 
@@ -32,10 +33,11 @@ services:
       dockerfile: ./bars-ejb/Dockerfile
     ports:
       - 9080:9080
+    restart: unless-stopped
     networks:
       - soa-network
 
-  bars-service:
+  bars-service-1:
     build:
       context: .
       dockerfile: ./bars-service/Dockerfile
@@ -44,6 +46,34 @@ services:
     ports:
       - 9677:9677 # https port
       - 9676:9676 # http port
+    restart: unless-stopped
+    networks:
+      - soa-network
+
+  bars-service-2:
+    build:
+      context: .
+      dockerfile: ./bars-service/Dockerfile
+    depends_on:
+      - bars-ejb
+    ports:
+      - 9679:9677 # https port
+      - 9678:9676 # http port
+    restart: unless-stopped
+    networks:
+      - soa-network
+
+  bars-balancer:
+    image: haproxy:alpine
+    ports:
+      - 4444:4444
+    volumes:
+      - ./balancer/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./balancer/haproxy-ssl.pem:/usr/local/etc/haproxy/haproxy-ssl.pem:ro
+    depends_on:
+      - bars-service-1
+      - bars-service-2
+    restart: unless-stopped
     networks:
       - soa-network
 

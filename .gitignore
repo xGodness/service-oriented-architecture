@@ -3,6 +3,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 auxiliairy
+wildfly-33.0.2.Final
+.run
 
 ### IntelliJ IDEA ###
 .idea
