@@ -14,7 +14,7 @@ services:
     networks:
       - soa-network
 
-  labworks-service:
+  labworks-service-1:
     build:
       context: .
       dockerfile: ./labworks-service/Dockerfile
@@ -23,9 +23,34 @@ services:
     ports:
       - 5269:5269 # https port
       - 5268:5268 # http port
+    environment:
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-1
     restart: unless-stopped
     networks:
       - soa-network
+
+  labworks-service-2:
+    build:
+      context: .
+      dockerfile: ./labworks-service/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 5271:5269 # https port
+      - 5270:5268 # http port
+    environment:
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-2
+    restart: unless-stopped
+    networks:
+      - soa-network
+
+  service-discovery:
+    image: consul:1.15.4
+    ports:
+      - 8500:8500
+    networks:
+      - soa-network
+    command: ["agent", "-dev", "-client=0.0.0.0", "-log-level=INFO"]
 
   bars-ejb:
     build:
@@ -63,7 +88,7 @@ services:
     networks:
       - soa-network
 
-  bars-balancer:
+  balancer:
     image: haproxy:alpine
     ports:
       - 4444:4444
@@ -71,6 +96,8 @@ services:
       - ./balancer/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
       - ./balancer/haproxy-ssl.pem:/usr/local/etc/haproxy/haproxy-ssl.pem:ro
     depends_on:
+      - labworks-service-1
+      - labworks-service-2
       - bars-service-1
       - bars-service-2
     restart: unless-stopped

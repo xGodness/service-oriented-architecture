@@ -1,30 +1,21 @@
-# How to make it work
+# What changed since 2-lab
 
-## [Deploying `labworks-service` on Payara Micro](labworks-service/README.md)
+* `labworks-service` is using Spring Boot with embedded Tomcat now.
+* `bars-service` is split in two modules: `bars-ejb` that encapsulates all business logic and made with EJB, and
+  `bars-service` that is just web-interface that delegates all computations to `bars-ejb`.
+* Now everything is deployed with Docker using `docker compose`.
+* HAProxy was added as a balancer for `labworks-service` and `bars-service`.
+* Consul was added as a service discovery mechanism for `labworks-service` instances.
 
-## [Deploying `bars-service` on WildFly (standalone mode)](bars-service/README.md)
+# What's important
 
-## Configuring truststore in WildFly
+* Now all requests being handled by HAProxy balancer, thus all requests regardless of the target service should be
+  addressed to the `4444` port.
+* If you want to rebuild docker service, use `docker compose up build --no-cache <service-name>`.
+* Anything that was mentioned in the 2-lab's README.md and was not mentioned here presumably remained unchanged.
 
-Since `bars-service` uses `labworks-service` as external API and `bars-service` allows only HTTPS requests, Payara's
-self-signed certificate should be added to the WildFly's truststore.
+# How to start
 
-1. Extract `MICRO-INF/domain/keystore.p12` from Payara Micro JAR-file.
-2. Export `s1as` certificate from `keystore.p12`:
-    ```shell
-    keytool -exportcert -alias s1as -keystore keystore.p12 -storetype PKCS12 -file payara-s1as-cert.crt
-    ```
-3. Create new `wildfly-truststore.jks` and import `payara-s1as-cert` to it:
-   ```shell
-   keytool -import -alias payara-s1as-cert -file payara-s1as-cert.crt -keystore wildfly-truststore.jks -storepass changeit
-   ```
-4. Store `wildfly-truststore.jks` somewhere inside `${WILDFLY_HOME}` directory (just for convenience, it's optional):
-   ```shell
-   mv wildfly-truststore.jks $WILDFLY_HOME/standalone/configuration
-   ```
-5. Add `JAVA_OPTS` to the `${WILDFLY_HOME}/bin/standalone.conf` to tell WildFly where to find new truststore:
-   ```
-   JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/absolute/path/to/wildfly/standalone/configuration/wildfly-truststore.jks -Djavax.net.ssl.trustStorePassword=changeit"
-   ```
-
-And you're all set.
+```shell
+docker compose up
+```
