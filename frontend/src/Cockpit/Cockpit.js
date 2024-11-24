@@ -393,7 +393,7 @@ const PostLabwork = () => {
       })
       .then((data) => {
         fetch(
-          labworkService + "/labworks-service/api/v1/labworks/",
+          labworkService + "/labworks-service/api/v1/labworks",
           requestOptions,
         )
           .then(async (response) => {

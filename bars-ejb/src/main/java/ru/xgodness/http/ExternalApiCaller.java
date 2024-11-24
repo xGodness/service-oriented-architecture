@@ -1,16 +1,43 @@
 package ru.xgodness.http;
 
 import lombok.extern.java.Log;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import ru.xgodness.labworks.dto.Labwork;
 import ru.xgodness.labworks.dto.LabworkPage;
 
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
 @Log
 public class ExternalApiCaller {
-    private static final RestTemplate restTemplate = new RestTemplate();
-    private static final String LABWORKS_SERVICE_BASE_URL = "https://labworks-service:5269/labworks-service/api/v1";
+    private static final RestTemplate restTemplate;
+    private static final String LABWORKS_SERVICE_BASE_URL = "https://balancer:4444/labworks-service/api/v1";
+
+    static {
+        SSLConfigurationProvider provider = new SSLConfigurationProvider();
+        try {
+            SSLContext sslContext = provider.getSSLContext();
+            PoolingHttpClientConnectionManager connectionManager = provider.getConnectionManager(sslContext);
+            CloseableHttpClient httpClient = provider.createHttpClient(connectionManager);
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+            restTemplate = new RestTemplate(requestFactory);
+        } catch (CertificateException
+                 | KeyStoreException
+                 | IOException
+                 | NoSuchAlgorithmException
+                 | KeyManagementException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     public static Labwork getLabworkById(long id) {
         return restTemplate.getForEntity(LABWORKS_SERVICE_BASE_URL + "/labworks/%d".formatted(id), Labwork.class).getBody();

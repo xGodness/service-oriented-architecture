@@ -1,2 +1,2 @@
-export const labworkService = "https://localhost:5269";
-export const barsService = "https://localhost:9677";
+export const labworkService = "https://localhost:4444";
+export const barsService = "https://localhost:4444";

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ejb.EJBException;
 import lombok.extern.java.Log;
+import org.jboss.ejb.client.RequestSendFailedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -36,7 +38,35 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
             return handleValidationException(cause, webRequest);
         if (ex.getCause() instanceof ResourceAccessException cause)
             return handleResourceAccessException(cause, webRequest);
+        if (ex.getCause() instanceof RequestSendFailedException cause)
+            return handleRequestSendFailedException(cause, webRequest);
+        if (ex.getCause() instanceof HttpServerErrorException.ServiceUnavailable cause)
+            return handleHttpServerErrorExceptionServiceUnavailable(cause, webRequest);
         return handleRuntimeException(new RuntimeException(ex), webRequest);
+    }
+
+    @ExceptionHandler(value = {HttpServerErrorException.ServiceUnavailable.class})
+    protected ResponseEntity<Object> handleHttpServerErrorExceptionServiceUnavailable(HttpServerErrorException.ServiceUnavailable ex, WebRequest webRequest) {
+        log.info("Caught HttpServerErrorException.ServiceUnavailable: " + ex.getMessage());
+
+        return super.handleExceptionInternal(
+                ex,
+                new ErrorMessages("External service is not available"),
+                new HttpHeaders(),
+                HttpStatus.SERVICE_UNAVAILABLE,
+                webRequest);
+    }
+
+    @ExceptionHandler(value = {RequestSendFailedException.class})
+    protected ResponseEntity<Object> handleRequestSendFailedException(RequestSendFailedException ex, WebRequest webRequest) {
+        log.info("Caught RequestSendFailedException: " + ex.getMessage());
+
+        return super.handleExceptionInternal(
+                ex,
+                new ErrorMessages("External service is not available"),
+                new HttpHeaders(),
+                HttpStatus.SERVICE_UNAVAILABLE,
+                webRequest);
     }
 
     @ExceptionHandler(value = {HttpClientErrorException.class})
