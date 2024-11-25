@@ -13,6 +13,7 @@
   addressed to the `4444` port.
 * If you want to rebuild docker service, use `docker compose up build --no-cache <service-name>`.
 * Anything that was mentioned in the 2-lab's README.md and was not mentioned here presumably remained unchanged.
+* For frontend testing purposes use Google Chrome with flag `--ignore-certificate-errors`. 
 
 # How to start
 

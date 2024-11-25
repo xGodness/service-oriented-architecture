@@ -95,6 +95,7 @@ services:
     volumes:
       - ./balancer/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
       - ./balancer/haproxy-ssl.pem:/usr/local/etc/haproxy/haproxy-ssl.pem:ro
+      - ./balancer/cors.lua:/usr/local/etc/haproxy/cors.lua:ro
       - ./balancer/errors/429.http:/usr/local/etc/haproxy/429.http:ro
       - ./balancer/errors/503.http:/usr/local/etc/haproxy/503.http:ro
     depends_on:
