@@ -31,8 +31,13 @@ function LabworkPage() {
 
   useEffect(() => {
     fetch(labworkService + "/labworks-service/api/v1/enums/difficulty")
-      .then((res) => {
-        return res.json();
+      .then(async (res) => {
+          let data = await res.json();
+
+          if (!res.ok) {
+              return Promise.reject(data.messages[0]);
+          }
+        return data;
       })
       .then((data) => {
         setDifficulties(data);
@@ -53,7 +58,10 @@ function LabworkPage() {
             setSelfStudyHours(data.discipline.selfStudyHours);
             setX(data.coordinates.x);
             setY(data.coordinates.y);
-          });
+          }).catch((err)=>{
+            setError(err);
+        })
+        ;
       })
       .catch((err) => {
         if (err.message === "Failed to fetch") setError("No connection");
@@ -440,9 +448,9 @@ const ViewMode = ({ labwork, onEdit, onDelete, error }) => {
                 overflow: "hidden",
                 textAlign: "right",
               }}
-              title={labwork ? labwork.discipline.faculty : null}
+              title={labwork && labwork.discipline ? labwork.discipline.faculty : null}
             >
-              {labwork ? labwork.discipline.faculty : null}
+              {labwork && labwork.discipline ? labwork.discipline.faculty : null}
             </div>
           </div>
           <div className={"LabworkField"}>
@@ -454,9 +462,9 @@ const ViewMode = ({ labwork, onEdit, onDelete, error }) => {
                 overflow: "hidden",
                 textAlign: "right",
               }}
-              title={labwork ? labwork.discipline.name : null}
+              title={labwork && labwork.discipline  ? labwork.discipline.name : null}
             >
-              {labwork ? labwork.discipline.name : null}
+              {labwork && labwork.discipline  ? labwork.discipline.name : null}
             </div>
           </div>
           <div className={"LabworkField"}>
@@ -468,9 +476,9 @@ const ViewMode = ({ labwork, onEdit, onDelete, error }) => {
                 overflow: "hidden",
                 textAlign: "right",
               }}
-              title={labwork ? labwork.discipline.selfStudyHours : null}
+              title={labwork && labwork.discipline  ? labwork.discipline.selfStudyHours : null}
             >
-              {labwork ? labwork.discipline.selfStudyHours : null}
+              {labwork && labwork.discipline  ? labwork.discipline.selfStudyHours : null}
             </div>
           </div>
         </div>
@@ -490,7 +498,7 @@ const ViewMode = ({ labwork, onEdit, onDelete, error }) => {
                 textAlign: "right",
               }}
             >
-              {labwork ? labwork.coordinates.x : null}
+              {labwork && labwork.coordinates ? labwork.coordinates.x : null}
             </div>
           </div>
           <div className={"LabworkField"}>
@@ -503,7 +511,7 @@ const ViewMode = ({ labwork, onEdit, onDelete, error }) => {
                 textAlign: "right",
               }}
             >
-              {labwork ? labwork.coordinates.y : null}
+              {labwork && labwork.coordinates  ? labwork.coordinates.y : null}
             </div>
           </div>
         </div>

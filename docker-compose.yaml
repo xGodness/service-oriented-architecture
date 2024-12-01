@@ -14,12 +14,21 @@ services:
     networks:
       - soa-network
 
+  service-discovery:
+    image: consul:1.15.4
+    ports:
+      - 8500:8500
+    networks:
+      - soa-network
+    command: [ "agent", "-dev", "-client=0.0.0.0" ]
+
   labworks-service-1:
     build:
       context: .
       dockerfile: ./labworks-service/Dockerfile
     depends_on:
       - db
+      - service-discovery
     ports:
       - 5269:5269 # https port
       - 5268:5268 # http port
@@ -35,6 +44,7 @@ services:
       dockerfile: ./labworks-service/Dockerfile
     depends_on:
       - db
+      - service-discovery
     ports:
       - 5271:5269 # https port
       - 5270:5268 # http port
@@ -44,13 +54,21 @@ services:
     networks:
       - soa-network
 
-  service-discovery:
-    image: consul:1.15.4
+  labworks-service-3:
+    build:
+      context: .
+      dockerfile: ./labworks-service/Dockerfile
+    depends_on:
+      - db
+      - service-discovery
     ports:
-      - 8500:8500
+      - 5273:5269 # https port
+      - 5272:5268 # http port
+    environment:
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-3
+    restart: unless-stopped
     networks:
       - soa-network
-    command: ["agent", "-dev", "-client=0.0.0.0", "-log-level=INFO"]
 
   bars-ejb:
     build:
@@ -58,6 +76,7 @@ services:
       dockerfile: ./bars-ejb/Dockerfile
     ports:
       - 9080:9080
+      - 10990:10990 # mgmt
     restart: unless-stopped
     networks:
       - soa-network
@@ -89,16 +108,14 @@ services:
       - soa-network
 
   balancer:
-    image: haproxy:alpine
+    build:
+      context: .
+      dockerfile: ./balancer/Dockerfile
     ports:
       - 4444:4444
-    volumes:
-      - ./balancer/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-      - ./balancer/haproxy-ssl.pem:/usr/local/etc/haproxy/haproxy-ssl.pem:ro
-      - ./balancer/cors.lua:/usr/local/etc/haproxy/cors.lua:ro
-      - ./balancer/errors/429.http:/usr/local/etc/haproxy/429.http:ro
-      - ./balancer/errors/503.http:/usr/local/etc/haproxy/503.http:ro
+      - 8404:8404 # stats
     depends_on:
+      - service-discovery
       - labworks-service-1
       - labworks-service-2
       - bars-service-1

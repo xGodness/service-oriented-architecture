@@ -10,5 +10,6 @@ COPY ./bars-ejb/wildfly-config/standalone.conf ${WILDFLY_HOME}/bin/standalone.co
 
 # user authentication is needed by remote ejb & jndi (see /standalone/configuration/application-users.properties)
 RUN sh ${WILDFLY_HOME}/bin/add-user.sh -a -u user -p password
+RUN sh ${WILDFLY_HOME}/bin/add-user.sh -u admin -p password
 
 ENTRYPOINT ["sh", "/opt/jboss/wildfly/bin/standalone.sh"]

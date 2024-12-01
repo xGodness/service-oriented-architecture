@@ -15,6 +15,7 @@ const Faculties = () => {
         setDisciplines(data.elements);
       })
       .catch((err) => {
+        setDisciplines([]);
         // if (err.message === "Failed to fetch") setError("No connection");
       });
 
@@ -27,6 +28,7 @@ const Faculties = () => {
         setFaculties(data.elements);
       })
       .catch((err) => {
+        setFaculties([]);
         // if (err.message === "Failed to fetch") setError("No connection");
       });
   }, []);
@@ -36,7 +38,7 @@ const Faculties = () => {
       <div className={"MainWrapper"}>
         <div className={"header"}>Faculties</div>
         <div>
-          {faculties.map((d) => {
+          {faculties && faculties.map((d) => {
             return (
               <div style={{ padding: "5px" }}>
                 <div
@@ -60,7 +62,7 @@ const Faculties = () => {
       <div className={"MainWrapper"}>
         <div className={"header"}>Faculties and disciplines</div>
         <div>
-          {disciplines.map((d) => {
+          {disciplines && disciplines.map((d) => {
             return (
               <div style={{ padding: "5px" }}>
                 <div

@@ -332,6 +332,7 @@ const PostLabwork = () => {
         setDifficulties(data);
       })
       .catch((err) => {
+        setDifficulties([])
         if (err.message === "Failed to fetch") setError("No connection");
       });
   }, []);
@@ -417,6 +418,8 @@ const PostLabwork = () => {
       });
   };
 
+  console.log(difficulties)
+
   return (
     <div className={"wrapper2"}>
       <div className={"header2"}>New labwork</div>
@@ -447,10 +450,10 @@ const PostLabwork = () => {
         <div>Difficulty</div>
         <select
           onChange={handleDifficultyChange}
-          value={difficulty}
+          value={difficulty || ""}
           style={{ width: "209px" }}
         >
-          {difficulties.map((diff, id) => (
+          {difficulties.length>0 && difficulties.map((diff, id) => (
             <option key={"diff_" + id}>{diff.value}</option>
           ))}
         </select>
