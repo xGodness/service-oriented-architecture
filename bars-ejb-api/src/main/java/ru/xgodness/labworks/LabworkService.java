@@ -1,7 +1,7 @@
 package ru.xgodness.labworks;
 
 import jakarta.ejb.Remote;
-import ru.xgodness.labworks.dto.Labwork;
+import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 
 @Remote
 public interface LabworkService {

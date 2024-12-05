@@ -1,8 +1,7 @@
-package ru.xgodness.labworks.dto;
+package ru.xgodness.endpoint.labworks.model.dto;
 
 import lombok.*;
 import ru.xgodness.endpoint.faculties.dto.Discipline;
-import ru.xgodness.endpoint.labworks.model.dto.Coordinates;
 
 import java.io.Serializable;
 

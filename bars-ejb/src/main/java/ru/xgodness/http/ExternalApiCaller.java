@@ -7,8 +7,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import ru.xgodness.labworks.dto.Labwork;
-import ru.xgodness.labworks.dto.LabworkPage;
+import ru.xgodness.endpoint.labworks.model.dto.Labwork;
+import ru.xgodness.endpoint.labworks.model.dto.LabworkPage;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
