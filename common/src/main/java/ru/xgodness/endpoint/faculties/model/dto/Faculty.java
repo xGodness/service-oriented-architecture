@@ -1,4 +1,4 @@
-package ru.xgodness.endpoint.faculties.dto;
+package ru.xgodness.endpoint.faculties.model.dto;
 
 import lombok.*;
 

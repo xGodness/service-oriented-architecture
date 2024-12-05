@@ -1,6 +1,6 @@
 package ru.xgodness.model.dto.util;
 
-import ru.xgodness.endpoint.faculties.dto.Discipline;
+import ru.xgodness.endpoint.faculties.model.dto.Discipline;
 import ru.xgodness.endpoint.labworks.model.dto.Coordinates;
 import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 

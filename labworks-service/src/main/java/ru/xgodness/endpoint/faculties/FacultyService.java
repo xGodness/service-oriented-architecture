@@ -1,8 +1,8 @@
 package ru.xgodness.endpoint.faculties;
 
 import org.jooq.DSLContext;
-import ru.xgodness.endpoint.faculties.dto.Discipline;
-import ru.xgodness.endpoint.faculties.dto.Faculty;
+import ru.xgodness.endpoint.faculties.model.dto.Discipline;
+import ru.xgodness.endpoint.faculties.model.dto.Faculty;
 import ru.xgodness.endpoint.faculties.model.dto.DisciplinesList;
 import ru.xgodness.endpoint.faculties.model.dto.FacultiesList;
 import ru.xgodness.exception.AlreadyExistsException;
