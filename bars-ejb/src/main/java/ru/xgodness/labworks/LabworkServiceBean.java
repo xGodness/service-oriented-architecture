@@ -2,10 +2,10 @@ package ru.xgodness.labworks;
 
 import jakarta.ejb.Stateless;
 import org.jboss.ejb3.annotation.Pool;
+import ru.xgodness.endpoint.labworks.model.dto.Difficulty;
+import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 import ru.xgodness.http.ExternalApiCaller;
 import ru.xgodness.http.LabworkRequestBody;
-import ru.xgodness.labworks.dto.Difficulty;
-import ru.xgodness.labworks.dto.Labwork;
 
 @Stateless(name = "LabworkService")
 @Pool("slsb-strict-max-pool")

@@ -1,8 +1,7 @@
 import json
+import requests
 import subprocess
 from time import sleep
-
-import requests
 
 consul_url = "http://service-discovery:8500/v1/health/service/labworks-service"
 

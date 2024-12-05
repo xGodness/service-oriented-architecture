@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.xgodness.JNDIServiceProvider;
+import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 import ru.xgodness.labworks.LabworkService;
-import ru.xgodness.labworks.dto.Labwork;
 
 @Log
 @RestController

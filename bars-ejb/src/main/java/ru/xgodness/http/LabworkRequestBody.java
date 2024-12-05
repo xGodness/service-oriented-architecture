@@ -2,9 +2,9 @@ package ru.xgodness.http;
 
 import lombok.*;
 import ru.xgodness.endpoint.faculties.dto.Discipline;
-import ru.xgodness.labworks.dto.Difficulty;
-import ru.xgodness.labworks.dto.Labwork;
 import ru.xgodness.endpoint.labworks.model.dto.Coordinates;
+import ru.xgodness.endpoint.labworks.model.dto.Difficulty;
+import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 
 @Getter
 @Setter
