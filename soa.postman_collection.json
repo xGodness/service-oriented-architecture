@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "25c7b61b-3bdd-4982-baec-ec12926f7b48",
+		"name": "SOA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31056157"
+	},
+	"item": [
+		{
+			"name": "labworks-service",
+			"item": [
+				{
+					"name": "labworks",
+					"item": [
+						{
+							"name": "labworks",
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"lab\",\n  \"coordinates\": {\n    \"x\": 6,\n    \"y\": 32\n  },\n  \"minimalPoint\": 1.79769313486231580E+308,\n  \"difficulty\": \"hopeless\",\n  \"discipline\": {\n    \"faculty\": \"CS\",\n    \"name\": \"Informatics\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/labworks",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"labworks"
+									],
+									"query": [
+										{
+											"key": "aa",
+											"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "labworks/{id}",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"SOA Lab 1\",\n  \"coordinates\": {\n    \"x\": 100,\n    \"y\": 100\n  },\n  \"minimalPoint\": 122.23,\n  \"difficulty\": \"very_hard\",\n  \"discipline\": {\n    \"faculty\": \"SE\",\n    \"name\": \"Web programming\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/labworks/1",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"labworks",
+										"1"
+									],
+									"query": [
+										{
+											"key": "aa",
+											"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "labworks/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/labworks/1",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"labworks",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "labworks/{id}",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/labworks/12",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"labworks",
+										"12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "labworks",
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{metschemeod}}://localhost:{{labworks-port}}/labworks-service/api/v1/labworks?filter=name[~]=123",
+									"protocol": "{{metschemeod}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{labworks-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"labworks"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "coordinate_x",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "coordinate_x[desc]",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "difficulty",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "name[~]=SOA",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "id[gt]=7",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "name[eq]=SOA Lab 3",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "creation_date[gt]=sadfasdf",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "coordinate_x[gt]=asd",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "difficulty[eq]=",
+											"disabled": true
+										},
+										{
+											"key": "offset",
+											"value": "23",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "3",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "name[~]=123"
+										},
+										{
+											"key": "sort",
+											"value": "id[desc",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "faculties",
+					"item": [
+						{
+							"name": "faculties/{faculty}/{discipline-name}/labworks",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/faculties/CS/Informatics/labworks",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"faculties",
+										"CS",
+										"Informatics",
+										"labworks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "faculties",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/faculties",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"faculties"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "faculties",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/faculties",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"faculties"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "faculties/disciplines",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/faculties/disciplines",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"faculties",
+										"disciplines"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "faculties/disciplines",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"faculty\": \"2\",\n  \"name\": \"2\",\n  \"selfStudyHours\": 21\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/faculties/disciplines",
+									"protocol": "{{scheme}}",
+									"host": [
+										"localhost"
+									],
+									"port": "{{haproxy-port}}",
+									"path": [
+										"labworks-service",
+										"api",
+										"v1",
+										"faculties",
+										"disciplines"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "minimal-points/sum",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/minimal-points/sum",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{haproxy-port}}",
+							"path": [
+								"labworks-service",
+								"api",
+								"v1",
+								"minimal-points",
+								"sum"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "enums/{enum-name}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/enums/difficulty",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{haproxy-port}}",
+							"path": [
+								"labworks-service",
+								"api",
+								"v1",
+								"enums",
+								"difficulty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ping",
+					"protocolProfileBehavior": {
+						"followRedirects": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{haproxy-port}}/labworks-service/api/v1/ping",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{haproxy-port}}",
+							"path": [
+								"labworks-service",
+								"api",
+								"v1",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bars-service",
+			"item": [
+				{
+					"name": "difficulty/increase",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{haproxy-port}}/bars-service/api/v1/bars/labworks/1/difficulty/increase/1",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{haproxy-port}}",
+							"path": [
+								"bars-service",
+								"api",
+								"v1",
+								"bars",
+								"labworks",
+								"1",
+								"difficulty",
+								"increase",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "make-hardcore",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{bars-port}}/bars-service/api/v1/bars/faculties/2/2/make-hardcore",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{bars-port}}",
+							"path": [
+								"bars-service",
+								"api",
+								"v1",
+								"bars",
+								"faculties",
+								"2",
+								"2",
+								"make-hardcore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scheme}}://localhost:{{bars-port}}/bars-service/api/v1/bars/ping",
+							"protocol": "{{scheme}}",
+							"host": [
+								"localhost"
+							],
+							"port": "{{bars-port}}",
+							"path": [
+								"bars-service",
+								"api",
+								"v1",
+								"bars",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "labworks-port",
+			"value": "5269",
+			"type": "string"
+		},
+		{
+			"key": "bars-port",
+			"value": "9677",
+			"type": "string"
+		},
+		{
+			"key": "scheme",
+			"value": "https",
+			"type": "string"
+		},
+		{
+			"key": "haproxy-port",
+			"value": "4444"
+		}
+	]
+}
