@@ -69,13 +69,36 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 webRequest);
     }
 
+    @ExceptionHandler(value = {HttpClientErrorException.NotFound.class})
+    protected ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException.NotFound ex, WebRequest webRequest) {
+        log.info("Caught HttpClientErrorException.NotFound: " + ex.getMessage());
+
+        ErrorMessages errorMessages;
+        try {
+            String raw = ex.getResponseBodyAsString().replace("\"", "");
+            log.info("########## RAW ERROR: " + raw);
+            errorMessages = objectMapper.readValue(raw, ErrorMessages.class);
+        } catch (JsonProcessingException jsonEx) {
+            return handleRuntimeException(new RuntimeException(jsonEx), webRequest);
+        }
+
+        return super.handleExceptionInternal(
+                ex,
+                errorMessages,
+                new HttpHeaders(),
+                ex.getStatusCode(),
+                webRequest);
+    }
+
     @ExceptionHandler(value = {HttpClientErrorException.class})
     protected ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex, WebRequest webRequest) {
         log.info("Caught HttpClientErrorException: " + ex.getMessage());
 
         ErrorMessages errorMessages;
         try {
-            errorMessages = objectMapper.readValue(ex.getResponseBodyAsString(), ErrorMessages.class);
+            String raw = ex.getResponseBodyAsString().replace("\\", "").replace("\"[", "[").replace("]\"", "]");
+            log.info("########## RAW ERROR: " + raw);
+            errorMessages = objectMapper.readValue(raw, ErrorMessages.class);
         } catch (JsonProcessingException jsonEx) {
             return handleRuntimeException(new RuntimeException(jsonEx), webRequest);
         }

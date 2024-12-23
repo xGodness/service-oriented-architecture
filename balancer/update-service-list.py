@@ -3,7 +3,7 @@ import requests
 import subprocess
 from time import sleep
 
-consul_url = "http://service-discovery:8500/v1/health/service/labworks-service"
+consul_url = "http://service-discovery:8500/v1/health/service/labworks-rest"
 
 cfg_input_template = "\tserver {} {}:{} ssl verify none\n"
 haproxy_dir = "/usr/local/etc/haproxy"

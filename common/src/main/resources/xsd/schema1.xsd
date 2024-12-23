@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost:5268/labworks-service/api/v1/ws/" elementFormDefault="qualified" targetNamespace="http://localhost:5268/labworks-service/api/v1/ws/" version="1.0">
+    
+  <xs:element name="addDisciplineRequest" type="tns:addDisciplineRequest"/>
+    
+  <xs:element name="addDisciplineResponse" type="tns:addDisciplineResponse"/>
+    
+  <xs:element name="addFacultyRequest" type="tns:addFacultyRequest"/>
+    
+  <xs:element name="addFacultyResponse" type="tns:addFacultyResponse"/>
+    
+  <xs:element name="addLabworkRequest" type="tns:addLabworkRequest"/>
+    
+  <xs:element name="addLabworkResponse" type="tns:addLabworkResponse"/>
+    
+  <xs:element name="checkFacultyAndDisciplineExistenceRequest" type="tns:checkFacultyAndDisciplineExistenceRequest"/>
+    
+  <xs:element name="checkFacultyAndDisciplineExistenceResponse" type="tns:checkFacultyAndDisciplineExistenceResponse"/>
+    
+  <xs:element name="coordinates" type="tns:coordinates"/>
+    
+  <xs:element name="deleteLabworkByIdRequest" type="tns:deleteLabworkByIdRequest"/>
+    
+  <xs:element name="deleteLabworksByFacultyAndDisciplineRequest" type="tns:deleteLabworksByFacultyAndDisciplineRequest"/>
+    
+  <xs:element name="difficulty" type="tns:difficulty"/>
+    
+  <xs:element name="discipline" type="tns:discipline"/>
+    
+  <xs:element name="disciplinesList" type="tns:disciplinesList"/>
+    
+  <xs:element name="enumRepresentation" type="tns:enumRepresentation"/>
+    
+  <xs:element name="facultiesList" type="tns:facultiesList"/>
+    
+  <xs:element name="faculty" type="tns:faculty"/>
+    
+  <xs:element name="getAllLabworksRequest" type="tns:getAllLabworksRequest"/>
+    
+  <xs:element name="getAllLabworksResponse" type="tns:getAllLabworksResponse"/>
+    
+  <xs:element name="getDisciplinesRequest" type="tns:getDisciplinesRequest"/>
+    
+  <xs:element name="getDisciplinesResponse" type="tns:getDisciplinesResponse"/>
+    
+  <xs:element name="getEnumRequest" type="tns:getEnumRequest"/>
+    
+  <xs:element name="getEnumResponse" type="tns:getEnumResponse"/>
+    
+  <xs:element name="getFacultiesRequest" type="tns:getFacultiesRequest"/>
+    
+  <xs:element name="getFacultiesResponse" type="tns:getFacultiesResponse"/>
+    
+  <xs:element name="getLabworkByIdRequest" type="tns:getLabworkByIdRequest"/>
+    
+  <xs:element name="getLabworkByIdResponse" type="tns:getLabworkByIdResponse"/>
+    
+  <xs:element name="labwork" type="tns:labwork"/>
+    
+  <xs:element name="labworkPage" type="tns:labworkPage"/>
+    
+  <xs:element name="minimalPointsSum" type="tns:minimalPointsSum"/>
+    
+  <xs:element name="pingRequest" type="tns:pingRequest"/>
+    
+  <xs:element name="queryParam" type="tns:queryParam"/>
+    
+  <xs:element name="sumMinimalPointsRequest" type="tns:sumMinimalPointsRequest"/>
+    
+  <xs:element name="sumMinimalPointsResponse" type="tns:sumMinimalPointsResponse"/>
+    
+  <xs:element name="updateLabworkByIdRequest" type="tns:updateLabworkByIdRequest"/>
+    
+  <xs:element name="updateLabworkByIdResponse" type="tns:updateLabworkByIdResponse"/>
+    
+  <xs:complexType name="enumRepresentation">
+        
+    <xs:sequence>
+            
+      <xs:element name="displayValue" type="xs:string"/>
+            
+      <xs:element name="numericValue" type="xs:int"/>
+            
+      <xs:element name="value" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getEnumRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="enumName" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getEnumResponse">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="enumRepresentationsList" type="tns:enumRepresentation"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="discipline">
+        
+    <xs:sequence>
+            
+      <xs:element name="faculty" type="xs:string"/>
+            
+      <xs:element name="name" type="xs:string"/>
+            
+      <xs:element name="selfStudyHours" type="xs:long"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="disciplinesList">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="elements" type="tns:discipline"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="facultiesList">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="elements" type="tns:faculty"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="faculty">
+        
+    <xs:sequence>
+            
+      <xs:element name="name" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addDisciplineRequest">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:discipline"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addFacultyRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="faculty" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="checkFacultyAndDisciplineExistenceRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="disciplineName" type="xs:string"/>
+            
+      <xs:element name="faculty" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="deleteLabworksByFacultyAndDisciplineRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="disciplineName" type="xs:string"/>
+            
+      <xs:element name="faculty" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getDisciplinesRequest">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getFacultiesRequest">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addDisciplineResponse">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:discipline"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addFacultyResponse">
+        
+    <xs:sequence>
+            
+      <xs:element name="faculty" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="checkFacultyAndDisciplineExistenceResponse">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This class is necessary since precious Mule ESB is unable to handle soap faults unless it expects non empty response from method
+That's just hilarious tbh]]></xs:documentation>
+    </xs:annotation>
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getDisciplinesResponse">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="disciplineList" type="tns:discipline"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getFacultiesResponse">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="facultyList" type="tns:faculty"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="coordinates">
+        
+    <xs:sequence>
+            
+      <xs:element name="x" type="xs:long"/>
+            
+      <xs:element name="y" type="xs:int"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="labwork">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:coordinates"/>
+            
+      <xs:element minOccurs="0" name="creationDate" type="xs:string"/>
+            
+      <xs:element ref="difficulty"/>
+            
+      <xs:element ref="tns:discipline"/>
+            
+      <xs:element minOccurs="0" name="id" type="xs:long"/>
+            
+      <xs:element name="minimalPoint" type="xs:double"/>
+            
+      <xs:element name="name" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="labworkPage">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" name="elements" type="tns:labwork"/>
+            
+      <xs:element name="totalCount" type="xs:long"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addLabworkRequest">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:labwork"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="deleteLabworkByIdRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="id" type="xs:long"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getAllLabworksRequest">
+        
+    <xs:sequence>
+            
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="queryParamList" type="tns:queryParam"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="queryParam">
+        
+    <xs:sequence>
+            
+      <xs:element name="param" type="xs:string"/>
+            
+      <xs:element name="value" type="xs:string"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getLabworkByIdRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="id" type="xs:long"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="updateLabworkByIdRequest">
+        
+    <xs:sequence>
+            
+      <xs:element name="id" type="xs:long"/>
+            
+      <xs:element ref="tns:labwork"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="addLabworkResponse">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:labwork"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getAllLabworksResponse">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:labworkPage"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="getLabworkByIdResponse">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:labwork"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="updateLabworkByIdResponse">
+        
+    <xs:sequence>
+            
+      <xs:element ref="tns:labwork"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="minimalPointsSum">
+        
+    <xs:sequence>
+            
+      <xs:element name="value" type="xs:double"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="sumMinimalPointsRequest">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="sumMinimalPointsResponse">
+        
+    <xs:sequence>
+            
+      <xs:element name="value" type="xs:double"/>
+          
+    </xs:sequence>
+      
+  </xs:complexType>
+    
+  <xs:complexType name="pingRequest">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+    
+  <xs:simpleType name="difficulty">
+        
+    <xs:restriction base="xs:string">
+            
+      <xs:enumeration value="VERY_EASY"/>
+            
+      <xs:enumeration value="EASY"/>
+            
+      <xs:enumeration value="HARD"/>
+            
+      <xs:enumeration value="VERY_HARD"/>
+            
+      <xs:enumeration value="HOPELESS"/>
+          
+    </xs:restriction>
+      
+  </xs:simpleType>
+  
+</xs:schema>

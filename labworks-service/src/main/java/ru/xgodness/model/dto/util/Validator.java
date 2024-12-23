@@ -56,11 +56,11 @@ public class Validator {
         if (minimalPoint == null) return Optional.of("Minimal point must not be null");
         if (Double.isInfinite(minimalPoint) || Double.isNaN(minimalPoint))
             return Optional.of("Minimal point must be finite number");
-        if (minimalPoint < 0) return Optional.of("Minimal point must be greater than 0");
+        if (minimalPoint <= 0) return Optional.of("Minimal point must be positive");
         return Optional.empty();
     }
 
-    private static List<String> validateDiscipline(Discipline discipline) {
+    public static List<String> validateDiscipline(Discipline discipline) {
         List<String> errors = new ArrayList<>();
         if (discipline == null) errors.add("Discipline must not be null");
         else {
@@ -70,7 +70,7 @@ public class Validator {
         return errors;
     }
 
-    private static Optional<String> validateStringField(String value, String fieldName) {
+    public static Optional<String> validateStringField(String value, String fieldName) {
         if (value == null || value.isEmpty()) return Optional.of(fieldName + " must not be null or empty");
         return Optional.empty();
     }

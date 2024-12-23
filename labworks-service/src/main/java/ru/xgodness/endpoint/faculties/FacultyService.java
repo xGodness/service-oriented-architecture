@@ -3,15 +3,16 @@ package ru.xgodness.endpoint.faculties;
 import org.jooq.DSLContext;
 import ru.xgodness.endpoint.faculties.model.dto.Discipline;
 import ru.xgodness.endpoint.faculties.model.dto.Faculty;
-import ru.xgodness.endpoint.faculties.model.dto.DisciplinesList;
-import ru.xgodness.endpoint.faculties.model.dto.FacultiesList;
 import ru.xgodness.exception.AlreadyExistsException;
 import ru.xgodness.exception.NotFoundException;
 import ru.xgodness.exception.ValidationException;
+import ru.xgodness.model.dto.util.Validator;
 import ru.xgodness.model.generated.tables.Labwork;
 import ru.xgodness.model.generated.tables.records.DisciplineRecord;
 import ru.xgodness.model.generated.tables.records.FacultyRecord;
 import ru.xgodness.orm.DSLContextProvider;
+
+import java.util.List;
 
 import static ru.xgodness.model.generated.tables.Discipline.DISCIPLINE;
 import static ru.xgodness.model.generated.tables.Faculty.FACULTY;
@@ -20,6 +21,9 @@ public class FacultyService {
     private static final DSLContext context = DSLContextProvider.getContext();
 
     public static void deleteLabworksByFacultyAndDiscipline(String faculty, String disciplineName) {
+        List<String> errors = Validator.validateDiscipline(new Discipline(faculty, disciplineName, 0));
+        if (!errors.isEmpty()) throw new ValidationException(errors);
+
         if (!disciplineExists(faculty, disciplineName))
             throw new NotFoundException("Discipline %s on faculty %s was not found".formatted(disciplineName, faculty));
 
@@ -28,39 +32,39 @@ public class FacultyService {
                 .execute();
     }
 
-    public static DisciplinesList getAllDisciplines() {
-        return new DisciplinesList(
-                context.select(
-                                DISCIPLINE.FACULTY,
-                                DISCIPLINE.NAME,
-                                DISCIPLINE.SELF_STUDY_HOURS)
-                        .from(DISCIPLINE)
-                        .orderBy(DISCIPLINE.FACULTY, DISCIPLINE.NAME)
-                        .fetch()
-                        .stream()
-                        .map(record -> Discipline.builder()
-                                .faculty(record.getValue(DISCIPLINE.FACULTY))
-                                .name(record.getValue(DISCIPLINE.NAME))
-                                .selfStudyHours(record.getValue(DISCIPLINE.SELF_STUDY_HOURS))
-                                .build())
-                        .toList()
-        );
+    public static List<Discipline> getAllDisciplines() {
+        return context.select(
+                        DISCIPLINE.FACULTY,
+                        DISCIPLINE.NAME,
+                        DISCIPLINE.SELF_STUDY_HOURS)
+                .from(DISCIPLINE)
+                .orderBy(DISCIPLINE.FACULTY, DISCIPLINE.NAME)
+                .fetch()
+                .stream()
+                .map(record -> Discipline.builder()
+                        .faculty(record.getValue(DISCIPLINE.FACULTY))
+                        .name(record.getValue(DISCIPLINE.NAME))
+                        .selfStudyHours(record.getValue(DISCIPLINE.SELF_STUDY_HOURS))
+                        .build())
+                .toList();
     }
 
-    public static FacultiesList getAllFaculties() {
-        return new FacultiesList(
-                context.select(FACULTY.NAME)
-                        .from(FACULTY)
-                        .orderBy(FACULTY.NAME)
-                        .fetch()
-                        .stream()
-                        .map(record -> new Faculty(record.getValue(DISCIPLINE.NAME)))
-                        .toList()
-        );
+    public static List<Faculty> getAllFaculties() {
+        return context.select(FACULTY.NAME)
+                .from(FACULTY)
+                .orderBy(FACULTY.NAME)
+                .fetch()
+                .stream()
+                .map(record -> new Faculty(record.getValue(DISCIPLINE.NAME)))
+                .toList();
     }
 
     public static Faculty storeFaculty(Faculty dto) {
         String faculty = dto.getName();
+        Validator.validateStringField(faculty, "Faculty").ifPresent(err -> {
+            throw new ValidationException(err);
+        });
+
         if (facultyExists(faculty))
             throw new AlreadyExistsException("Faculty %s already exists".formatted(faculty));
 
@@ -71,6 +75,9 @@ public class FacultyService {
     }
 
     public static Discipline storeDiscipline(Discipline dto) {
+        List<String> errors = Validator.validateDiscipline(dto);
+        if (!errors.isEmpty()) throw new ValidationException(errors);
+
         String faculty = dto.getFaculty();
         String disciplineName = dto.getName();
         long selfStudyHours = dto.getSelfStudyHours();
