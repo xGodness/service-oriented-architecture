@@ -1,19 +1,8 @@
-# What changed since 2-lab
+# What changed since 3-lab
 
-* `labworks-service` is using Spring Boot with embedded Tomcat now.
-* `bars-service` is split in two modules: `bars-ejb` that encapsulates all business logic and made with EJB, and
-  `bars-service` that is just web-interface that delegates all computations to `bars-ejb`.
-* Now everything is deployed with Docker using `docker compose`.
-* HAProxy was added as a balancer for `labworks-service` and `bars-service`.
-* Consul was added as a service discovery mechanism for `labworks-service` instances.
-
-# What's important
-
-* Now all requests being handled by HAProxy balancer, thus all requests regardless of the target service should be
-  addressed to the `4444` port.
-* If you want to rebuild docker service, use `docker compose up build --no-cache <service-name>`.
-* Anything that was mentioned in the 2-lab's README.md and was not mentioned here presumably remained unchanged.
-* For frontend testing purposes use Google Chrome with flag `--ignore-certificate-errors`. 
+* `labworks-service` is using SOAP now instead of REST; `labworks-rest` is a REST-gateway.
+* `Mule ESB` was added as `mule-esb` module.
+* `bars-ejb` uses `Mule` to communicate with the `labworks-service`.
 
 # How to start
 

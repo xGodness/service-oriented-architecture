@@ -22,50 +22,47 @@ services:
       - soa-network
     command: [ "agent", "-dev", "-client=0.0.0.0" ]
 
-  labworks-service-1:
+  labworks-service:
     build:
       context: .
       dockerfile: ./labworks-service/Dockerfile
     depends_on:
       - db
-      - service-discovery
     ports:
       - 5269:5269 # https port
       - 5268:5268 # http port
-    environment:
-      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-1
     restart: unless-stopped
     networks:
       - soa-network
 
-  labworks-service-2:
+  labworks-rest-1:
     build:
       context: .
-      dockerfile: ./labworks-service/Dockerfile
+      dockerfile: ./labworks-rest/Dockerfile
     depends_on:
       - db
       - service-discovery
     ports:
-      - 5271:5269 # https port
-      - 5270:5268 # http port
+      - 5169:5169 # https port
+      - 5168:5168 # http port
     environment:
-      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-2
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-rest-1
     restart: unless-stopped
     networks:
       - soa-network
 
-  labworks-service-3:
+  labworks-rest-2:
     build:
       context: .
-      dockerfile: ./labworks-service/Dockerfile
+      dockerfile: ./labworks-rest/Dockerfile
     depends_on:
       - db
       - service-discovery
     ports:
-      - 5273:5269 # https port
-      - 5272:5268 # http port
+      - 5171:5169 # https port
+      - 5170:5168 # http port
     environment:
-      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-service-3
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=labworks-rest-2
     restart: unless-stopped
     networks:
       - soa-network
@@ -116,10 +113,22 @@ services:
       - 8404:8404 # stats
     depends_on:
       - service-discovery
-      - labworks-service-1
-      - labworks-service-2
+      - labworks-rest-1
+      - labworks-rest-2
       - bars-service-1
       - bars-service-2
+    restart: unless-stopped
+    networks:
+      - soa-network
+
+  mule-esb:
+    build:
+      context: .
+      dockerfile: ./mule-esb/Dockerfile
+    ports:
+      - 8081:8081
+    depends_on:
+      - labworks-service
     restart: unless-stopped
     networks:
       - soa-network

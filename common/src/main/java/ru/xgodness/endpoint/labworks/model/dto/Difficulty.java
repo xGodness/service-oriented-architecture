@@ -1,17 +1,23 @@
 package ru.xgodness.endpoint.labworks.model.dto;
 
-import lombok.Getter;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import ru.xgodness.exception.ValidationException;
 
 import java.io.Serializable;
 
-@Getter
+@XmlRootElement
 public enum Difficulty implements Serializable {
     VERY_EASY("very_easy"),
     EASY("easy"),
     HARD("hard"),
     VERY_HARD("very_hard"),
     HOPELESS("hopeless");
+
+    @XmlElement(required = true)
+    public String getLiteral() {
+        return literal;
+    }
 
     private final String literal;
 

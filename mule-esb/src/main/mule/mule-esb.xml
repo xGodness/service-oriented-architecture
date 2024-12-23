@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5e5cd9b1-7ae5-4e0d-a1d3-79f0e5b9d61c" basePath="/labworks-service/api/v1/">
+        <http:listener-connection host="0.0.0.0" port="8081" protocol="HTTPS">
+            <tls:context>
+                <tls:key-store type="pkcs12" path="${mule.home}/apps/${app.name}/ssl/keystore.p12" alias="labworks-service" keyPassword="changeit" password="changeit" />
+            </tls:context>
+        </http:listener-connection>
+    </http:listener-config>
+    <wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="641154cb-9ce9-43ae-a196-8259486c8992" >
+        <wsc:connection wsdlLocation="http://labworks-service:5268/labworks-service/api/v1/ws/default.wsdl" service="DefaultPortService" port="DefaultPortSoap11" address="http://labworks-service:5268/labworks-service/api/v1/ws" >
+            <wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+        </wsc:connection>
+    </wsc:config>
+    <flow name="updateLabworkById" doc:id="6ed9a8e7-d572-44c9-b637-5588cc0cf1b6" >
+        <http:listener doc:name="Listener" doc:id="29fb0a3e-543f-4704-a464-06145026dace" config-ref="HTTP_Listener_config" path="/labworks/{id}" outputMimeType="application/json" allowedMethods="PUT">
+            <http:error-response statusCode="#[payload.statusCode]">
+                <http:body ><![CDATA[#[output application/json
+---
+{
+	"messages": payload.messages
+}]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <ee:transform doc:name="Transform Message" doc:id="f9e54e41-13dd-41fa-81c6-c1b847d4a189">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/xml
+ns ns2 http://localhost:5268/labworks-service/api/v1/ws/
+---
+{
+	ns2#updateLabworkByIdRequest: {
+		ns2#id: attributes.uriParams.id,
+		ns2#labwork: {
+			ns2#name: payload.name,
+			ns2#coordinates: {
+				ns2#x: payload.coordinates.x,
+				ns2#y: payload.coordinates.y
+			},
+			ns2#minimalPoint: payload.minimalPoint,
+			ns2#difficulty: payload.difficulty,
+			ns2#discipline: {
+				ns2#faculty: payload.discipline.faculty,
+				ns2#name: payload.discipline.name
+			}
+		}
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <wsc:consume operation="updateLabworkById" doc:name="Consume" doc:id="13aad6a5-4f06-4218-b82b-5cc1816db4ae" config-ref="Web_Service_Consumer_Config">
+        </wsc:consume>
+        <logger level="INFO" doc:name="Logger" doc:id="1e093943-f973-4a33-8316-d9a18d880a7c" message="#[payload]"/>
+        <ee:transform doc:name="Transform Message" doc:id="e08d72ad-53ab-427f-a327-75c47b9f0f27">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+ns ns0 http://localhost:5268/labworks-service/api/v1/ws/
+output application/json
+---
+payload.body.ns0#updateLabworkByIdResponse]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler >
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0735a850-50b6-4d2b-98e2-a97b18aeacbc" type="ANY">
+                <ee:transform doc:name="Transform Message" doc:id="4f9a7de1-35ee-4403-8420-0db29efa3e0f" >
+                    <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var detail = read(error.exception.cause.detail, "text/xml")
+---
+{
+	"statusCode": detail.detail.statusCode,
+	"messages": detail.detail.description
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Logger" doc:id="b551d089-89d6-4262-b78e-350b925861ca" message="#[payload]"/>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="getTenMostDifficultLabworks" doc:id="6549eb31-9a25-4ca9-8d0f-23b1c163e003" >
+        <http:listener doc:name="Listener" doc:id="60b71877-52c7-4de9-84cd-32931a7aa5e3" config-ref="HTTP_Listener_config" path="/labworks" allowedMethods="GET" outputMimeType="application/json">
+            <http:error-response statusCode="#[payload.statusCode]" >
+                <http:body ><![CDATA[#[output application/json
+---
+{
+	"messages": payload.messages
+}]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <ee:transform doc:name="Transform Message" doc:id="9ccec270-ff13-4351-a9cb-cc96ce596539">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/xml
+ns ns2 http://localhost:5268/labworks-service/api/v1/ws/
+---
+{
+	ns2#getAllLabworksRequest: {
+		ns2#queryParamList: {
+			ns2#param: "filter",
+			ns2#value: "faculty[neq]=" ++ attributes.queryParams.'excludeFaculty' as String
+		},
+		ns2#queryParamList: {
+			ns2#param: "filter",
+			ns2#value: "discipline_name[neq]=" ++ attributes.queryParams.'excludeDiscipline' as String
+		},
+		ns2#queryParamList: {
+			ns2#param: "limit",
+			ns2#value: 10
+		}
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <wsc:consume operation="getAllLabworks" doc:name="Consume" doc:id="cdca50a2-ad8a-4a48-9b7e-a1b382454868" config-ref="Web_Service_Consumer_Config">
+        </wsc:consume>
+        <logger level="INFO" doc:name="Logger" doc:id="86da3ab9-890e-41ec-81d3-4e75b78242ea" message="#[payload]"/>
+        <ee:transform doc:name="Transform Message" doc:id="ce4cb009-a358-4ec5-85ac-7d1521568f33" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+ns ns0 http://localhost:5268/labworks-service/api/v1/ws/
+output application/json duplicateKeyAsArray=true
+---
+payload.body.ns0#getAllLabworksResponse.ns0#labworkPage]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler >
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2750663e-ac87-48c1-a13f-66412a23798a" type="ANY" >
+                <ee:transform doc:name="Transform Message" doc:id="4ea77a47-73f3-4fd6-8c2e-ac441d277f2e" >
+                    <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var detail = read(error.exception.cause.detail, "text/xml")
+---
+{
+	"statusCode": detail.detail.statusCode,
+	"messages": detail.detail.description
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Logger" doc:id="688459c6-f846-4fe8-b4c0-0bb47d6f7a2f" message="#[payload]" />
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="checkFacultyAndDisciplineExistence" doc:id="81e91c98-f8af-4ab6-b8a5-8060156fa383" >
+        <http:listener doc:name="Listener" doc:id="82d8c4bd-d837-4d6c-b2eb-c88d0400694e" config-ref="HTTP_Listener_config" path="/faculties/check/{faculty}/{discipline}" allowedMethods="GET">
+            <http:error-response statusCode="#[payload.statusCode]" >
+                <http:body ><![CDATA[#[output application/json
+---
+{
+	"messages": payload.messages
+}]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <ee:transform doc:name="Transform Message" doc:id="7db4f319-1a25-4391-ba6a-ebdd0ad0185a" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+output text/xml
+ns ns2 http://localhost:5268/labworks-service/api/v1/ws/
+---
+{
+	ns2#checkFacultyAndDisciplineExistenceRequest: {
+		ns2#faculty: attributes.uriParams.faculty,
+		ns2#disciplineName: attributes.uriParams.discipline
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <wsc:consume operation="checkFacultyAndDisciplineExistence" doc:name="Consume" doc:id="cdedc58f-5589-4ef5-b715-0a3f27469a13" config-ref="Web_Service_Consumer_Config"/>
+        <logger level="INFO" doc:name="Logger" doc:id="58daf13b-7c8b-4f23-a862-5543ecf98b2b" message="#[payload]"/>
+        <set-payload value="#[null]" doc:name="Set Payload" doc:id="ba2fabf3-93eb-4bc4-89a0-de5c505eb54e" />
+        <error-handler >
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9fe4d329-9484-4a24-af4f-b511184a0a5b" type="ANY" >
+                <ee:transform doc:name="Transform Message" doc:id="b3ab59a5-ed93-4970-8353-c37ec35471f9" >
+                    <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var detail = read(error.exception.cause.detail, "text/xml")
+---
+{
+	"statusCode": detail.detail.statusCode,
+	"messages": detail.detail.description
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Logger" doc:id="f77361a5-544b-466a-bede-40cba9cb612f" message="#[payload]" />
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="addLabwork" doc:id="80791704-ad94-4548-9cdf-2c58798a102b" >
+        <http:listener doc:name="Listener" doc:id="3ac1cdee-70cd-4a08-9451-068a38e4f0c9" config-ref="HTTP_Listener_config" path="/labworks" outputMimeType="application/json" allowedMethods="POST" >
+            <http:error-response statusCode="#[payload.statusCode]" >
+                <http:body ><![CDATA[#[output application/json
+---
+{
+	"messages": payload.messages
+}]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <ee:transform doc:name="Transform Message" doc:id="7ef460f1-0ed4-40d9-9d44-cfd458c8f579" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+output text/xml
+ns ns2 http://localhost:5268/labworks-service/api/v1/ws/
+---
+{
+	ns2#addLabworkRequest: {
+		ns2#labwork: {
+			ns2#name: payload.name,
+			ns2#coordinates: {
+				ns2#x: payload.coordinates.x,
+				ns2#y: payload.coordinates.y
+			},
+			ns2#minimalPoint: payload.minimalPoint,
+			ns2#difficulty: payload.difficulty,
+			ns2#discipline: {
+				ns2#faculty: payload.discipline.faculty,
+				ns2#name: payload.discipline.name
+			}
+		}
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <wsc:consume operation="updateLabworkById" doc:name="Consume" doc:id="108eb96b-e267-4e9a-89b6-1c7633abad8b" config-ref="Web_Service_Consumer_Config" />
+        <logger level="INFO" doc:name="Logger" doc:id="bcf4eac5-4a16-4554-bd82-3a04fa7b2b3d" message="#[payload]" />
+        <ee:transform doc:name="Transform Message1" doc:id="3e2ad537-fd7d-4162-9a3c-25d071e2dedd" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+ns ns0 http://localhost:5268/labworks-service/api/v1/ws/
+output application/json
+---
+payload.body.ns0#addLabworkResponse]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler >
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3c4c525d-73fe-4067-ba3c-a2bd86c96fd1" type="ANY" >
+                <ee:transform doc:name="Transform Message" doc:id="40e76312-e8ea-4b2b-864e-a98eb67b9853" >
+                    <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var detail = read(error.exception.cause.detail, "text/xml")
+---
+{
+	"statusCode": detail.detail.statusCode,
+	"messages": detail.detail.description
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Logger" doc:id="9d78a604-3933-4aa9-89a1-c5966c1dc9d5" message="#[payload]" />
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="getLabworkById" doc:id="818bc516-1602-491f-8494-df75d67b7922" >
+        <http:listener doc:name="Listener" doc:id="aaf4e42f-df56-4f9c-a6f7-06dd7d5be573" config-ref="HTTP_Listener_config" path="/labworks/{id}" outputMimeType="application/json" allowedMethods="GET" >
+            <http:error-response statusCode="#[payload.statusCode]" >
+                <http:body ><![CDATA[#[output application/json
+---
+{
+	"messages": payload.messages
+}]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <ee:transform doc:name="Transform Message" doc:id="3e6af42b-a8af-4fa0-a38e-7f2f73fe76a2" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+output text/xml
+ns ns2 http://localhost:5268/labworks-service/api/v1/ws/
+---
+{
+	ns2#getLabworkByIdRequest: {
+		ns2#id: attributes.uriParams.id
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <wsc:consume operation="getAllLabworks" doc:name="Consume" doc:id="a96c9bb1-2933-4bbb-b054-3a298e3b7b9c" config-ref="Web_Service_Consumer_Config" />
+        <logger level="INFO" doc:name="Logger" doc:id="7b3d0890-81e1-49db-b11b-1ccdc3aeed09" message="#[payload]" />
+        <ee:transform doc:name="Transform Message1" doc:id="17af6856-3923-4f1c-b0c9-fadc23141559" >
+            <ee:message >
+                <ee:set-payload ><![CDATA[%dw 2.0
+ns ns0 http://localhost:5268/labworks-service/api/v1/ws/
+output application/json duplicateKeyAsArray=true
+---
+payload.body.ns0#getLabworkByIdResponse]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler >
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e87c80bb-85a4-4647-98b2-401a218d8566" type="ANY" >
+                <ee:transform doc:name="Transform Message" doc:id="5a38af06-8081-40a6-a1a4-b6cc4e4699ab" >
+                    <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var detail = read(error.exception.cause.detail, "text/xml")
+---
+{
+	"statusCode": detail.detail.statusCode,
+	"messages": detail.detail.description
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Logger" doc:id="99d9206b-b36a-4967-a71a-ad8dff063001" message="#[payload]" />
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+</mule>

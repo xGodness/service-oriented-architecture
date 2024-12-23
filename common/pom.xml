@@ -3,13 +3,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.xgodness</groupId>
-        <artifactId>3-lab</artifactId>
+        <artifactId>4-lab</artifactId>
         <version>1.0</version>
     </parent>
 
     <artifactId>common</artifactId>
     <packaging>jar</packaging>
     <name>common</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <finalName>common</finalName>
@@ -21,6 +29,28 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-xsd</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>schemagen</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.basedir}/src/main/resources/xsd</outputDirectory>
+                    <clearOutputDir>true</clearOutputDir>
+                    <sources>
+                        <source>${project.basedir}/src/main/java/ru/xgodness/endpoint/</source>
+                    </sources>
                 </configuration>
             </plugin>
         </plugins>

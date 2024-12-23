@@ -1,20 +1,28 @@
 package ru.xgodness;
 
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.catalina.connector.Connector;
-import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.xgodness.endpoint.labworks.model.dto.Difficulty;
-import ru.xgodness.model.dto.util.DifficultyDeserializer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.ws.config.annotation.EnableWs;
+import org.springframework.ws.soap.server.endpoint.SoapFaultDefinition;
+import org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver;
+import org.springframework.ws.transport.http.MessageDispatcherServlet;
+import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
+import org.springframework.xml.xsd.SimpleXsdSchema;
+import org.springframework.xml.xsd.XsdSchema;
+import ru.xgodness.exception.handling.SoapFaultHandler;
 
+@EnableWs
 @Configuration
 public class ApplicationConfiguration {
-    private final int HTTP_PORT = 5268;
+    public static final String NAMESPACE_URI = "http://localhost:5268/labworks-service/api/v1/ws/";
+    private static final int HTTP_PORT = 5268;
 
     /* Add new connector to allow both http and https requests */
     @Bean
@@ -27,24 +35,45 @@ public class ApplicationConfiguration {
         };
     }
 
-    /* Registers custom `Difficulty` class deserializer */
-    @Bean
-    public Module withCustomDeserializers() {
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Difficulty.class, new DifficultyDeserializer());
-        return module;
-    }
-
     /* Fixes `Invalid character found in the request target` error when [ and ] are present in the request url */
     @Bean
     public ConfigurableServletWebServerFactory webServerFactory() {
         TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
-            @Override
-            public void customize(Connector connector) {
-                connector.setProperty("relaxedQueryChars", "|{}[]");
-            }
-        });
+        factory.addConnectorCustomizers(connector -> connector.setProperty("relaxedQueryChars", "|{}[]"));
         return factory;
+    }
+
+    @Bean
+    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
+        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+        servlet.setApplicationContext(applicationContext);
+        servlet.setTransformWsdlLocations(true);
+        return new ServletRegistrationBean<>(servlet, "/ws/*");
+    }
+
+    @Bean(name = "default")
+    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema schema) {
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("DefaultPort");
+        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setTargetNamespace(NAMESPACE_URI);
+        wsdl11Definition.setSchema(schema);
+        return wsdl11Definition;
+    }
+
+    @Bean
+    public XsdSchema schema() {
+        return new SimpleXsdSchema(new ClassPathResource("xsd/schema1.xsd"));
+    }
+
+    @Bean
+    public SoapFaultMappingExceptionResolver soapFaultHandler() {
+        SoapFaultMappingExceptionResolver exceptionResolver = new SoapFaultHandler();
+        SoapFaultDefinition faultDefinition = new SoapFaultDefinition();
+        faultDefinition.setFaultCode(SoapFaultDefinition.SERVER);
+        faultDefinition.setFaultStringOrReason("Exception occurred");
+        exceptionResolver.setDefaultFault(faultDefinition);
+        exceptionResolver.setOrder(1);
+        return exceptionResolver;
     }
 }

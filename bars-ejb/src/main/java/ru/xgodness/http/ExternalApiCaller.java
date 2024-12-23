@@ -9,6 +9,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import ru.xgodness.endpoint.labworks.model.dto.Labwork;
 import ru.xgodness.endpoint.labworks.model.dto.LabworkPage;
+import ru.xgodness.endpoint.labworks.model.response.GetLabworkByIdResponse;
+import ru.xgodness.endpoint.labworks.model.response.UpdateLabworkByIdResponse;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.security.cert.CertificateException;
 @Log
 public class ExternalApiCaller {
     private static final RestTemplate restTemplate;
-    private static final String LABWORKS_SERVICE_BASE_URL = "https://balancer:4444/labworks-service/api/v1";
+    private static final String LABWORKS_SERVICE_BASE_URL = "https://mule-esb:8081/labworks-service/api/v1";
 
     static {
         SSLConfigurationProvider provider = new SSLConfigurationProvider();
@@ -40,7 +42,9 @@ public class ExternalApiCaller {
     }
 
     public static Labwork getLabworkById(long id) {
-        return restTemplate.getForEntity(LABWORKS_SERVICE_BASE_URL + "/labworks/%d".formatted(id), Labwork.class).getBody();
+        return restTemplate.getForEntity(
+                LABWORKS_SERVICE_BASE_URL + "/labworks/%d".formatted(id),
+                GetLabworkByIdResponse.class).getBody().getLabwork();
     }
 
     public static Labwork updateLabworkById(long id, LabworkRequestBody requestBody) {
@@ -49,8 +53,8 @@ public class ExternalApiCaller {
                 LABWORKS_SERVICE_BASE_URL + "/labworks/%d".formatted(id),
                 HttpMethod.PUT,
                 requestEntity,
-                Labwork.class
-        ).getBody();
+                UpdateLabworkByIdResponse.class
+        ).getBody().getLabwork();
     }
 
     public static void postLabwork(LabworkRequestBody requestBody) {
@@ -63,7 +67,7 @@ public class ExternalApiCaller {
     }
 
     public static LabworkPage getTenMostDifficultLabworks(String excludeFaculty, String excludeDiscipline) {
-        String url = LABWORKS_SERVICE_BASE_URL + "/labworks?filter=faculty[neq]=%s&filter=discipline_name[neq]=%s&limit=10".formatted(excludeFaculty, excludeDiscipline);
+        String url = LABWORKS_SERVICE_BASE_URL + "/labworks?excludeFaculty=%s&excludeDiscipline=%s".formatted(excludeFaculty, excludeDiscipline);
         log.info("[getTenMostDifficultLabworks] Sending request: " + url);
         return restTemplate.getForEntity(url, LabworkPage.class).getBody();
     }
