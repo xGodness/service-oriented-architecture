@@ -9,5 +9,3 @@
 ```shell
 docker compose up
 ```
-
-# All lab reports are stored [here](https://github.com/xGodness/itmo/tree/main/4-year/service-oriented-architecture/reports)
